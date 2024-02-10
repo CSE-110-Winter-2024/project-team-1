@@ -57,6 +57,7 @@ public class MainViewModel extends ViewModel {
     public void markComplete(int sortOrder) {
         var tasks = this.orderedTasks.getValue();
         var newTasks = SuccessoratorTasks.toggleComplete(tasks, sortOrder);
+        taskRepository.save(newTasks);
         this.orderedTasks.setValue(newTasks);
     }
 
