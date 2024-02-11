@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.successorator.ui.tasklist;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import java.util.function.Consumer;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
-import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
 
 public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask> {
     Consumer<SuccessoratorTask> onTaskClick;
@@ -24,7 +22,6 @@ public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask
             Context context, List<SuccessoratorTask> tasks, Consumer<SuccessoratorTask> onTaskClick
     ) {
         super(context, 0, new ArrayList<>(tasks));
-        this.onTaskClick = onTaskClick;
     }
 
     @NonNull
@@ -43,12 +40,7 @@ public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask
         }
 
         binding.taskName.setText(task.getName());
-        binding.taskName.setOnClickListener(v -> {
-            onTaskClick.accept(task);
-        });
-        if (task.getIsComplete()) {
-            binding.taskName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-        }
+        //binding.taskName.setOnClickListener(v -> onTaskClick.accept(task));
 
         return binding.getRoot();
     }
