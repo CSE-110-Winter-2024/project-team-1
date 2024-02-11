@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuccessoratorTasksTest extends TestCase {
+public class SuccessoratorTasksTest {
     @Test
     public void testToggleComplete() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
