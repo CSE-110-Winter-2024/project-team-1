@@ -8,11 +8,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTaskRepository;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
@@ -23,7 +19,6 @@ public class MainViewModel extends ViewModel {
 
     private final SuccessoratorTaskRepository taskRepository;
 
-    private MainViewModel mainViewModel;
     private final MutableSubject<List<SuccessoratorTask>> orderedTasks;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -35,27 +30,6 @@ public class MainViewModel extends ViewModel {
                         return new MainViewModel(app.getTaskRepository());
                     });
 
-    //might make public
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
-        Button viewTasksButton = findViewById(R.id.viewTasksButton);
-        viewTasksButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //need to update tasks somehow
-                mainViewModel.getOrderedTasks().observe(MainActivity.this, tasks -> {
-                    //enter tasks here
-                    for (SuccessoratorTask task : tasks) {
-                        //print out each task
-                        System.out.println("Task: " + task.getTitle());
-                    }
-                });
-            }
-        });
-    }
-    //regular main view function
     public MainViewModel(SuccessoratorTaskRepository taskRepository) {
         this.taskRepository = taskRepository;
 
