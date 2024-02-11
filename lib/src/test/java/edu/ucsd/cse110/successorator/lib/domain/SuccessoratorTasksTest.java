@@ -20,5 +20,7 @@ public class SuccessoratorTasksTest {
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 1);
 
         assertEquals(true, modifiedTasks.get(1).getIsComplete().booleanValue());
+        assertEquals(false, modifiedTasks.get(0).getIsComplete().booleanValue());
+        assertEquals(false, modifiedTasks.get(2).getIsComplete().booleanValue());
     }
 }
