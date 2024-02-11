@@ -22,7 +22,7 @@ public class SuccessoratorTaskEntity {
     @ColumnInfo(name = "is_complete")
     public Boolean isComplete = false;
 
-    SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete) {
+    public SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete) {
         this.name = name;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
