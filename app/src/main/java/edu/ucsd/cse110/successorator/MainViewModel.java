@@ -53,4 +53,7 @@ public class MainViewModel extends ViewModel {
         return orderedTasks;
     }
 
+    public void add(SuccessoratorTask task) {
+        taskRepository.add(task);
+    }
 }
