@@ -43,8 +43,8 @@ public class SuccessoratorTaskListFragment extends Fragment {
         this.adapter = new SuccessoratorTaskListAdapter(
                 requireContext(),
                 List.of(),
-                id -> {
-                    //todo
+                task -> {
+                    activityModel.markComplete(task.getSortOrder());
                 }
         );
 
