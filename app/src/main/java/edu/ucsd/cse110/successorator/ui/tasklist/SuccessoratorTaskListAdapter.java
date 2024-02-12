@@ -42,10 +42,11 @@ public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask
             binding = ListItemTaskBinding.inflate(layoutInflater, parent, false);
         }
 
-        binding.taskName.setText(task.getName());
-        binding.taskName.setOnClickListener(v -> {
+        binding.getRoot().setOnClickListener(v -> {
             onTaskClick.accept(task);
         });
+        
+        binding.taskName.setText(task.getName());
         if (task.getIsComplete()) {
             binding.taskName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
