@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.domain;
+package edu.ucsd.cse110.successorator.lib.domain;
 
 import static org.junit.Assert.assertEquals;
 
