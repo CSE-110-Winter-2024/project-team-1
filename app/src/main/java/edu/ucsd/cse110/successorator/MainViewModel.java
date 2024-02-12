@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTaskRepository;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -56,4 +57,12 @@ public class MainViewModel extends ViewModel {
     public void add(SuccessoratorTask task) {
         taskRepository.add(task);
     }
+  
+    public void markComplete(int sortOrder) {
+        var tasks = this.orderedTasks.getValue();
+        var newTasks = SuccessoratorTasks.toggleComplete(tasks, sortOrder);
+        taskRepository.save(newTasks);
+        this.orderedTasks.setValue(newTasks);
+    }
+
 }
