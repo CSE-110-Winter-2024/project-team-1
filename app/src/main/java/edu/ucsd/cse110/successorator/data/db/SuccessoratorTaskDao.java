@@ -35,11 +35,8 @@ import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 
         @Transaction
         default int add(SuccessoratorTask task) {
-            // tasks are always added to the front
-            // add 1 to all tasks' sort orders
-            shiftSortOrders(0, getMaxSortOrder(), 1);
-
-            var newTask = new SuccessoratorTaskEntity(task.getName(), getMinSortOrder() - 1, false);
+            // tasks are always added to the back
+            var newTask = new SuccessoratorTaskEntity(task.getName(), getMaxSortOrder() + 1, false);
             // insert the new task
             return  Math.toIntExact(insert(newTask));
         }
