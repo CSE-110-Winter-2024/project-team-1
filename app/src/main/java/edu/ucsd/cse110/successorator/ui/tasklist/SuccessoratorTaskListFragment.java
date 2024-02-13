@@ -67,6 +67,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
 
         this.view.taskList.setAdapter(adapter);
+        this.view.taskList.setEmptyView(this.view.emptyText);
         return view.getRoot();
     }
 }
