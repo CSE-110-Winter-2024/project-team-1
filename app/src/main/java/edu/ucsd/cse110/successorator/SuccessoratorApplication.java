@@ -24,7 +24,7 @@ public class SuccessoratorApplication extends Application {
                 .allowMainThreadQueries()
                 .build();
 
-        this.taskRepository = new RoomSuccessoratorTaskRepository(database.taskDao())
+        this.taskRepository = new RoomSuccessoratorTaskRepository(database.taskDao());
     }
 
     public SuccessoratorTaskRepository getTaskRepository() {
