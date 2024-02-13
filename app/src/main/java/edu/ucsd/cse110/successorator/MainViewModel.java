@@ -60,6 +60,7 @@ public class MainViewModel extends ViewModel {
         var tasks = this.orderedTasks.getValue();
         if (tasks == null) { // TODO: this only really happens when we're using InMemory -- does not address the root cause
             taskRepository.add(task);
+            return;
         }
         var newTasks = SuccessoratorTasks.insertTask(tasks, task);
         taskRepository.save(newTasks);
