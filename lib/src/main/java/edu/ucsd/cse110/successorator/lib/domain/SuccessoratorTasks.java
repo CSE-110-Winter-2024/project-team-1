@@ -26,6 +26,12 @@ public class SuccessoratorTasks {
         tasks.remove(sortOrder);
         return insertTask(tasks, modifiedTask);
     }
+
+    public static List<SuccessoratorTask> removeCompletedTasks(List<SuccessoratorTask> tasks) {
+        return tasks.stream()
+                .filter(task -> !task.getIsComplete())
+                .collect(java.util.stream.Collectors.toList());
+    }
 /*    public static List<SuccessoratorTask> toggleComplete(List<SuccessoratorTask> tasks, int sortOrder) {
         int i; // finished list start index
         for (i = 0; i < tasks.size(); i++) {
