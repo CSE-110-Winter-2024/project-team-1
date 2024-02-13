@@ -55,7 +55,12 @@ public class MainViewModel extends ViewModel {
     }
 
     public void add(SuccessoratorTask task) {
-        taskRepository.add(task);
+        //taskRepository.add(task);
+        // temporary change pending OH consultation
+        var tasks = this.orderedTasks.getValue();
+        var newTasks = SuccessoratorTasks.insertTask(tasks, task);
+        taskRepository.save(newTasks);
+        this.orderedTasks.setValue(newTasks);
     }
   
     public void markComplete(int sortOrder) {
