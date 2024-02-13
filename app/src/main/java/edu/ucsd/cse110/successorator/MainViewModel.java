@@ -71,14 +71,4 @@ public class MainViewModel extends ViewModel {
         this.orderedTasks.setValue(newTasks);
     }
 
-    public void removeFinishedTasks() {
-        var tasks = this.orderedTasks.getValue();
-        if (tasks == null) {
-            return;
-        }
-        var newTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
-        taskRepository.save(newTasks);
-        this.orderedTasks.setValue(newTasks);
-    }
-
 }

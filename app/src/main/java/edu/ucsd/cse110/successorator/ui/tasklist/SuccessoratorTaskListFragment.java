@@ -90,7 +90,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         view.testDayChangeButton.setOnClickListener(v -> {
             view.dateText.setText(dateManager.incrementDate());
-            activityModel.removeFinishedTasks();
         });
 
         return view.getRoot();
@@ -102,9 +101,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         // Update dateText
         view.dateText.setText(formattedDate);
-
-        //scan for finished tasks and remove them
-        activityModel.removeFinishedTasks();
     }
 
     @Override

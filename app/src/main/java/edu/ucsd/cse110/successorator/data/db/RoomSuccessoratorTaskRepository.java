@@ -43,7 +43,6 @@ public class RoomSuccessoratorTaskRepository implements SuccessoratorTaskReposit
 
     @Override
     public void save(List<SuccessoratorTask> tasks) {
-        dao.deleteAll();
         var entities = tasks.stream()
                 .map(SuccessoratorTaskEntity::fromTask)
                 .collect(Collectors.toList());
