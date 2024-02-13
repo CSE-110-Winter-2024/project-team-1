@@ -68,13 +68,14 @@ public class SuccessoratorTaskListFragment extends Fragment {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
 
         this.view.taskList.setAdapter(adapter);
+        this.view.taskList.setEmptyView(this.view.emptyText);
 
         // link button with creation fragment
         view.addTaskButton.setOnClickListener(v -> {
             var dialogFragment = CreateTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
-
+      
         return view.getRoot();
     }
 }
