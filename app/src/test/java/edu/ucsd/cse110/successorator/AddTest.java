@@ -18,7 +18,7 @@ public class AddTest extends TestCase {
 
         MainViewModel viewModel = new MainViewModel(taskRepository);
 
-        SuccessoratorTask taskToAdd = new SuccessoratorTask(4, "test", 1, false);
+        SuccessoratorTask taskToAdd = new SuccessoratorTask(1, "test", 1, false);
 
         viewModel.add(taskToAdd);
 
