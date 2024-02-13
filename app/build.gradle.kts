@@ -41,6 +41,7 @@ dependencies {
     implementation("androidx.test:core:1.5.0")
     implementation("androidx.media3:media3-test-utils:1.2.1")
     implementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")

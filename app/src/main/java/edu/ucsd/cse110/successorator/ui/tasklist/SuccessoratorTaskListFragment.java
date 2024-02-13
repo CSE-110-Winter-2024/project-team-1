@@ -15,6 +15,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment;
 
 public class SuccessoratorTaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -68,6 +69,13 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         this.view.taskList.setAdapter(adapter);
         this.view.taskList.setEmptyView(this.view.emptyText);
+
+        // link button with creation fragment
+        view.addTaskButton.setOnClickListener(v -> {
+            var dialogFragment = CreateTaskDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
+        });
+      
         return view.getRoot();
     }
 }
