@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class DateManager {
-    private static final String DATE_FORMAT = "EEEE MMMM/dd";
+    private static final String DATE_FORMAT = "EEEE M/d";
 
     private Calendar calendar = Calendar.getInstance();
 
