@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.inputmethod.EditorInfo;
 
 // androidx imports
 import androidx.annotation.NonNull;
@@ -37,13 +38,23 @@ public class CreateTaskDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogCreateTaskBinding.inflate(getLayoutInflater());
 
-        return new AlertDialog.Builder(getActivity())
+        var dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Task")
                 .setMessage("Please enter the new task's title.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
+
+        view.taskNameEntry.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                return true;
+            }
+            return false;
+        });
+
+        return dialog;
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
