@@ -9,8 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DateManagerTest {
-    private static final String DATE_FORMAT = "EEEE MMMM dd";
-
     @Test
     public void testGetDate() {
         DateManager dateManager = new DateManager();
@@ -23,7 +21,7 @@ public class DateManagerTest {
         assertEquals(false, date.isEmpty());
 
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat(DATE_FORMAT, java.util.Locale.getDefault());
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat(dateManager.getDateFormatConstant(), java.util.Locale.getDefault());
         String expectedDate = sdf.format(calendar.getTime());
 
         // Assert that the date is the same as the expected date

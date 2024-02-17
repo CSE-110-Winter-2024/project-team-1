@@ -23,4 +23,8 @@ public class DateManager {
         // Format the new date
         return sdf.format(calendar.getTime());
     }
+
+    public String getDateFormatConstant() {
+        return DATE_FORMAT;
+    }
 }
