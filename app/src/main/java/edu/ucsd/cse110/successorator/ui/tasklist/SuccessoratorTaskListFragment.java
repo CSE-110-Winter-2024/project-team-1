@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.successorator.ui.tasklist;
 
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +16,6 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment;
-import edu.ucsd.cse110.successorator.util.DateChangeReceiver;
 import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class SuccessoratorTaskListFragment extends Fragment {
@@ -26,7 +23,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
 
-    private DateChangeReceiver dateChangeReceiver;
 
     private DateManager dateManager = new DateManager();
 
@@ -43,8 +39,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        dateChangeReceiver = new DateChangeReceiver(this::updateDate);
 
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
@@ -93,31 +87,5 @@ public class SuccessoratorTaskListFragment extends Fragment {
         });
 
         return view.getRoot();
-    }
-
-    private void updateDate() {
-        // Get current date
-        String formattedDate = dateManager.getDate();
-
-        // Update dateText
-        view.dateText.setText(formattedDate);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Register BroadcastReceiver to listen for date changes
-        IntentFilter filter = new IntentFilter(Intent.ACTION_DATE_CHANGED);
-        requireContext().registerReceiver(dateChangeReceiver, filter);
-
-        // Update date text
-        updateDate();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Unregister BroadcastReceiver
-        requireContext().unregisterReceiver(dateChangeReceiver);
     }
 }
