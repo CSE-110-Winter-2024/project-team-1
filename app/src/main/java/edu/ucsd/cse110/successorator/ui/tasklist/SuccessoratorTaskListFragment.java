@@ -15,6 +15,8 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
 import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment;
 import edu.ucsd.cse110.successorator.util.DateManager;
 
@@ -84,6 +86,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         view.testDayChangeButton.setOnClickListener(v -> {
             view.dateText.setText(dateManager.incrementDate());
+            SuccessoratorTasks.removeCompletedTasks(activityModel.getOrderedTasks().getValue()); // DEBUG
         });
 
         return view.getRoot();

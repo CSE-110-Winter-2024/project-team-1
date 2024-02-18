@@ -1,6 +1,13 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.time.ZoneId;
 import java.util.List;
+
+// time libraries
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 public class SuccessoratorTasks {
     public static List<SuccessoratorTask> insertTask(List<SuccessoratorTask> tasks, SuccessoratorTask task) {
@@ -28,8 +35,12 @@ public class SuccessoratorTasks {
     }
 
     public static List<SuccessoratorTask> removeCompletedTasks(List<SuccessoratorTask> tasks) {
+        // we force this to midnight for now, consider passing as a parameter in the future
+        // actual functionality pending further discussion
+        long cutoff = OffsetDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT, OffsetDateTime.now().getOffset()).toInstant().toEpochMilli();
+        System.out.println(cutoff); // debug to verify
         return tasks.stream()
-                .filter(task -> !task.getIsComplete())
+                .filter(task -> (!task.getIsComplete() || task.getDate() > cutoff))
                 .collect(java.util.stream.Collectors.toList());
     }
 /*    public static List<SuccessoratorTask> toggleComplete(List<SuccessoratorTask> tasks, int sortOrder) {
