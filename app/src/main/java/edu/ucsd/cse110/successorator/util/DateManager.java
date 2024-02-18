@@ -10,8 +10,11 @@ public class DateManager {
 
     private Calendar calendar = Calendar.getInstance();
 
+    public DateManager() {
+        calendar.add(Calendar.HOUR, -2);
+    }
+
     public String getDate() {
-        Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         return sdf.format(calendar.getTime());
     }

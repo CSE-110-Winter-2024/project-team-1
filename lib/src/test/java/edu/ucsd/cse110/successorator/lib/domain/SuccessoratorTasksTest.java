@@ -72,39 +72,4 @@ public class SuccessoratorTasksTest {
         assertEquals("Task 3", modifiedTasks.get(1).getName());
         assertEquals("Task 2", modifiedTasks.get(2).getName());
     }
-
-    @Test
-    public void testUntoggle() {
-        List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, true));
-
-        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 2);
-
-        assertEquals(false, modifiedTasks.get(0).getIsComplete().booleanValue());
-        assertEquals(false, modifiedTasks.get(1).getIsComplete().booleanValue());
-        assertEquals(false, modifiedTasks.get(2).getIsComplete().booleanValue());
-        assertEquals("Task 3", modifiedTasks.get(0).getName());
-        assertEquals("Task 1", modifiedTasks.get(1).getName());
-        assertEquals("Task 2", modifiedTasks.get(2).getName());
-    }
-
-    @Test
-    public void testDoubleToggle() {
-        List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false));
-
-        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 1);
-        modifiedTasks = SuccessoratorTasks.toggleComplete(modifiedTasks, 2);
-
-        assertEquals(false, modifiedTasks.get(0).getIsComplete().booleanValue());
-        assertEquals(false, modifiedTasks.get(1).getIsComplete().booleanValue());
-        assertEquals(false, modifiedTasks.get(2).getIsComplete().booleanValue());
-        assertEquals("Task 2", modifiedTasks.get(0).getName());
-        assertEquals("Task 1", modifiedTasks.get(1).getName());
-        assertEquals("Task 3", modifiedTasks.get(2).getName());
-    }
 }

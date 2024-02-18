@@ -59,11 +59,11 @@ public class MainViewModel extends ViewModel {
             taskRepository.add(task);
             return;
         }
-        var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
+        var newTasks = SuccessoratorTasks.insertTask(tasks, task);
         taskRepository.save(newTasks);
         this.orderedTasks.setValue(newTasks);
     }
-  
+
     public void markComplete(int sortOrder) {
         var tasks = this.orderedTasks.getValue();
         var newTasks = SuccessoratorTasks.toggleComplete(tasks, sortOrder);
@@ -71,4 +71,14 @@ public class MainViewModel extends ViewModel {
         this.orderedTasks.setValue(newTasks);
     }
 
+    public void removeFinishedTasks() {
+        var tasks = this.orderedTasks.getValue();
+        if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
+            return;
+        }
+        var newTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
+        taskRepository.save(newTasks);
+        this.orderedTasks.setValue(newTasks);
+    }
 }
