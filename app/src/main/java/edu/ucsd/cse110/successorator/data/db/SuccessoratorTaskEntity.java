@@ -19,26 +19,22 @@ public class SuccessoratorTaskEntity {
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
-    @ColumnInfo(name = "created_date")
-    public long date;
-
     @ColumnInfo(name = "is_complete")
     public Boolean isComplete = false;
 
-    public SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete, long date) {
+    public SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete) {
         this.name = name;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
-        this.date = date;
     }
 
     public static SuccessoratorTaskEntity fromTask(@NonNull SuccessoratorTask task) {
-        var newTask = new SuccessoratorTaskEntity(task.getName(), task.getSortOrder(), task.getIsComplete(), task.getDate());
+        var newTask = new SuccessoratorTaskEntity(task.getName(), task.getSortOrder(), task.getIsComplete());
         newTask.id = task.getId();
         return newTask;
     }
 
     public @NonNull SuccessoratorTask toTask() {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, date);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete);
     }
 }
