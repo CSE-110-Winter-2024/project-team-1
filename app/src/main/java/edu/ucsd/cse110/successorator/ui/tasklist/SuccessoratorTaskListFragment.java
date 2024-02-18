@@ -16,11 +16,15 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment;
+import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class SuccessoratorTaskListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
+
+
+    private DateManager dateManager = new DateManager();
 
     public SuccessoratorTaskListFragment() {
     }
@@ -69,13 +73,19 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         this.view.taskList.setAdapter(adapter);
         this.view.taskList.setEmptyView(this.view.emptyText);
-
         // link button with creation fragment
         view.addTaskButton.setOnClickListener(v -> {
             var dialogFragment = CreateTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
-      
+
+        // Update dateText
+        view.dateText.setText(dateManager.getDate());
+
+        view.testDayChangeButton.setOnClickListener(v -> {
+            view.dateText.setText(dateManager.incrementDate());
+        });
+
         return view.getRoot();
     }
 }

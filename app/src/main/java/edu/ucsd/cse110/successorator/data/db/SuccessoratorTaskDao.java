@@ -84,4 +84,5 @@ import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 
         @Update
         void update(SuccessoratorTaskEntity flashcard);
+
 }
