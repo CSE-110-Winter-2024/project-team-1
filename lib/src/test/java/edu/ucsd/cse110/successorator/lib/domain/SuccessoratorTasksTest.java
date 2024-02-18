@@ -1,11 +1,14 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
@@ -71,5 +74,37 @@ public class SuccessoratorTasksTest {
         assertEquals(true, modifiedTasks.get(2).getIsComplete().booleanValue());
         assertEquals("Task 3", modifiedTasks.get(1).getName());
         assertEquals("Task 2", modifiedTasks.get(2).getName());
+    }
+
+    @Test
+    public void testRemoveCompletedTasksOnce() {
+        List<SuccessoratorTask> tasks = new ArrayList<>();
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, true));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false));
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
+
+        assertEquals(2, modifiedTasks.size());
+        assertEquals("Task 3", modifiedTasks.get(1).getName());
+
+    }
+
+    @Test
+    public void testRemoveCompletedTasksTwice() {
+        List<SuccessoratorTask> tasks = new ArrayList<>();
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, true));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false));
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
+
+        assertEquals(2, modifiedTasks.size());
+        assertEquals("Task 2", modifiedTasks.get(0).getName());
+
+        var expected = modifiedTasks.toArray();
+        modifiedTasks.add(new SuccessoratorTask(4, "Task 4", 3, true));
+        modifiedTasks = SuccessoratorTasks.removeCompletedTasks(modifiedTasks);
+
+        assertArrayEquals(expected, modifiedTasks.toArray());
+
     }
 }
