@@ -45,9 +45,6 @@ public class MainViewModel extends ViewModel {
                 this.orderedTasks.setValue(newTasks);
             }
         });
-
-        //uncommenting this crashes app
-        //orderedTasks.observe(this.orderedTasks::setValue);
     }
 
     public Subject<List<SuccessoratorTask>> getOrderedTasks() {
