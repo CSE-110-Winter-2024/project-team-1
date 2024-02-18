@@ -36,7 +36,7 @@ import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
         @Transaction
         default int add(SuccessoratorTask task) {
             // tasks are always added to the back
-            var newTask = new SuccessoratorTaskEntity(task.getName(), getMaxSortOrder() + 1, false);
+            var newTask = new SuccessoratorTaskEntity(task.getName(), getMaxSortOrder() + 1, false, task.getDate());
             // insert the new task
             return  Math.toIntExact(insert(newTask));
         }
