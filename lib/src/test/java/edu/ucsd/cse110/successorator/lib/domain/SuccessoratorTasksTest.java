@@ -2,16 +2,11 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
-import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
 
 public class SuccessoratorTasksTest {
     @Test

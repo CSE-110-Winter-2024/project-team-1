@@ -37,6 +37,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
+    /* makes sure date is changed after orderedTasks are created */
     private Observer<List<SuccessoratorTask>> dateObserver = tasks -> {
         if (tasks != null) {
             var currDate = dateManager.getDate();
@@ -68,8 +69,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
-
-        var test = this.activityModel.getOrderedTasks();
 
         this.adapter = new SuccessoratorTaskListAdapter(
                 requireContext(),
@@ -123,7 +122,9 @@ public class SuccessoratorTaskListFragment extends Fragment {
         view.dateText.setText(dateManager.getDate());
 
         view.testDayChangeButton.setOnClickListener(v -> {
+            // stop comparing date to sharedPreferences
             activityModel.getOrderedTasks().removeObserver(dateObserver);
+
             var newDate = dateManager.incrementDate();
             view.dateText.setText(newDate);
             date.setValue(newDate);
@@ -135,7 +136,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        var test = dateManager.getDate();
         view.dateText.setText(dateManager.getDate());
         activityModel.getOrderedTasks().observe(dateObserver);
     }
