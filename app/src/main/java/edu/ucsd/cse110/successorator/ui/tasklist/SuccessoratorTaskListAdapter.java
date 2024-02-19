@@ -50,6 +50,9 @@ public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask
         if (task.getIsComplete()) {
             binding.taskName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
+        else {
+            binding.taskName.setPaintFlags(binding.taskName.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+        }
 
         return binding.getRoot();
     }
