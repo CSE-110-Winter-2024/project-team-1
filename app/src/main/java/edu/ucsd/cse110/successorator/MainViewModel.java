@@ -45,6 +45,9 @@ public class MainViewModel extends ViewModel {
                 this.orderedTasks.setValue(newTasks);
             }
         });
+
+        //uncommenting this crashes app
+        //orderedTasks.observe(this.orderedTasks::setValue);
     }
 
     public Subject<List<SuccessoratorTask>> getOrderedTasks() {
@@ -59,7 +62,7 @@ public class MainViewModel extends ViewModel {
             taskRepository.add(task);
             return;
         }
-        var newTasks = SuccessoratorTasks.insertTask(tasks, task);
+        var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
         taskRepository.save(newTasks);
         this.orderedTasks.setValue(newTasks);
     }
