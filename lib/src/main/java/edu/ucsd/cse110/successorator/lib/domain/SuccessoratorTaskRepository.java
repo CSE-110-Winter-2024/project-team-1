@@ -16,4 +16,6 @@ public interface SuccessoratorTaskRepository {
     void save(List<SuccessoratorTask> tasks);
 
     void markComplete(int id, int completedTasksBeginIndex);
+
+    void deleteAll();
 }

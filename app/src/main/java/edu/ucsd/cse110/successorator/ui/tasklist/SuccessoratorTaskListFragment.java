@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
@@ -118,16 +122,24 @@ public class SuccessoratorTaskListFragment extends Fragment {
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
 
-        // Update dateText
-        view.dateText.setText(dateManager.getDate());
 
-        view.testDayChangeButton.setOnClickListener(v -> {
-            // stop comparing date to sharedPreferences
-            activityModel.getOrderedTasks().removeObserver(dateObserver);
+        view.filterSpinner.setAdapter(new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                TaskFilterOption.values()
+        ));
 
-            var newDate = dateManager.incrementDate();
-            view.dateText.setText(newDate);
-            date.setValue(newDate);
+        view.filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                TaskFilterOption selectedOption = (TaskFilterOption) parent.getItemAtPosition(position);
+                activityModel.changeFilter(selectedOption);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing if nothing is selected
+            }
         });
 
         return view.getRoot();
@@ -136,7 +148,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        view.dateText.setText(dateManager.getDate());
         activityModel.getOrderedTasks().observe(dateObserver);
     }
 

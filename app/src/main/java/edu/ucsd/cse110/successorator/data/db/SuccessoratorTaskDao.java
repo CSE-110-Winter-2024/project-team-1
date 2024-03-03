@@ -36,7 +36,7 @@ public interface SuccessoratorTaskDao {
     @Transaction
     default int add(SuccessoratorTask task) {
         // tasks are always added to the back
-        var newTask = new SuccessoratorTaskEntity(task.getName(), getMaxSortOrder() + 1, false);
+        var newTask = new SuccessoratorTaskEntity(task.getName(), getMaxSortOrder() + 1, false, task.getType().name(), task.getDueDate());
         // insert the new task
         return  Math.toIntExact(insert(newTask));
     }
@@ -56,7 +56,7 @@ public interface SuccessoratorTaskDao {
         // Get the sort order for the completed index
 
         // Update the task as completed
-        var newTask = new SuccessoratorTask(task.getId(), task.getName(), completedTasksBeginIndex - 1, true);
+        var newTask = new SuccessoratorTask(task.getId(), task.getName(), completedTasksBeginIndex - 1, true, task.getType(), task.getDueDate());
 
         // Shift sort orders for tasks between currentSortOrder and completedSortOrder
         shiftSortOrders(getMinSortOrder(), completedTasksBeginIndex - 1, -1);

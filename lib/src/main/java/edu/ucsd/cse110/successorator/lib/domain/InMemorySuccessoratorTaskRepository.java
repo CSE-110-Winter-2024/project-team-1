@@ -34,7 +34,7 @@ public class InMemorySuccessoratorTaskRepository implements SuccessoratorTaskRep
 
     @Override
     public void add(SuccessoratorTask task) {
-        task = new SuccessoratorTask(nextId++, task.getName(), task.getSortOrder(), task.getIsComplete());
+        task = new SuccessoratorTask(nextId++, task.getName(), task.getSortOrder(), task.getIsComplete(), task.getType(), task.getDueDate());
         tasks.add(task);
     }
 
@@ -51,5 +51,10 @@ public class InMemorySuccessoratorTaskRepository implements SuccessoratorTaskRep
     @Override
     public void markComplete(int id, int completedTasksBeginIndex) {
         return;
+    }
+
+    @Override
+    public void deleteAll() {
+        tasks.clear();
     }
 }
