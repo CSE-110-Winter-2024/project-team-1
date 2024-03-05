@@ -59,4 +59,8 @@ public class RoomSuccessoratorTaskRepository implements SuccessoratorTaskReposit
     public void markComplete(int id, int completedTasksBeginIndex) {
         dao.markComplete(id, completedTasksBeginIndex);
     }
+
+    public void deleteAll() {
+        dao.deleteAll();
+    }
 }

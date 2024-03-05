@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 
 @Entity(tableName = "successoratorTasks")
 public class SuccessoratorTaskEntity {
@@ -22,19 +23,27 @@ public class SuccessoratorTaskEntity {
     @ColumnInfo(name = "is_complete")
     public Boolean isComplete = false;
 
-    public SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete) {
+    @ColumnInfo(name = "type")
+    public String type = TaskType.Normal.name();
+
+    @ColumnInfo(name = "due_date")
+    public long dueDate;
+
+    public SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete, String type, long dueDate) {
         this.name = name;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
+        this.type = type;
+        this.dueDate = dueDate;
     }
 
     public static SuccessoratorTaskEntity fromTask(@NonNull SuccessoratorTask task) {
-        var newTask = new SuccessoratorTaskEntity(task.getName(), task.getSortOrder(), task.getIsComplete());
+        var newTask = new SuccessoratorTaskEntity(task.getName(), task.getSortOrder(), task.getIsComplete(), task.getType().name(), task.getDueDate());
         newTask.id = task.getId();
         return newTask;
     }
 
     public @NonNull SuccessoratorTask toTask() {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, TaskType.valueOf(type), dueDate);
     }
 }

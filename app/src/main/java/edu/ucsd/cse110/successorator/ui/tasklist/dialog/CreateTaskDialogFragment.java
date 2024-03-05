@@ -14,9 +14,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 // internal imports
+import java.time.LocalDate;
+
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateTaskBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 
 public class CreateTaskDialogFragment extends DialogFragment {
     private MainViewModel activityModel;
@@ -62,7 +66,34 @@ public class CreateTaskDialogFragment extends DialogFragment {
 
         // it doesn't really matter what we pass here, since the add method will extract
         // only the name from the task (consider changing? possible refactor could be helpful)
-        var task = new SuccessoratorTask(null, name, -1, false);
+        long dueDate = 0;
+        switch (activityModel.getSelectedFilter()) {
+            case Today:
+                dueDate = LocalDate.now().toEpochDay();
+                break;
+            case Tomorrow:
+                dueDate = LocalDate.now().plusDays(1).toEpochDay();
+                break;
+            case Pending:
+                //if pending leave due date as 0, since it has no due date
+                break;
+                //TODO: add more cases for other filters
+            default:
+                break;
+        }
+
+        TaskType taskType = TaskType.Normal;
+        switch (activityModel.getSelectedFilter()) {
+            case Recurring:
+                taskType = TaskType.Recurring;
+                break;
+            case Pending:
+                taskType = TaskType.Pending;
+                break;
+            default:
+                break;
+        }
+        var task = new SuccessoratorTask(null, name, -1, false, taskType, dueDate);
 
         activityModel.add(task);
 
