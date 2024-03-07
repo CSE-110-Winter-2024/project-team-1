@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
@@ -122,11 +123,15 @@ public class SuccessoratorTaskListFragment extends Fragment {
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
 
+        DateManager dateManager = new DateManager();
+        String currentDate = dateManager.getDate();
+        List<Object> dropdownItems = new ArrayList<>(Arrays.asList(TaskFilterOption.values()));
+        dropdownItems.add(0, currentDate);
 
         view.filterSpinner.setAdapter(new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                TaskFilterOption.values()
+                dropdownItems
         ));
 
         view.filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

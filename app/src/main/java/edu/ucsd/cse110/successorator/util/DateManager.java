@@ -14,7 +14,7 @@ public class DateManager {
         calendar.add(Calendar.HOUR, -2);
     }
 
-    public String getDate() {
+    public String   getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
