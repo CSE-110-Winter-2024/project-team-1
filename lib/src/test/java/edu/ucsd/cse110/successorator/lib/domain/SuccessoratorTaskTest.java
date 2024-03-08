@@ -13,7 +13,7 @@ public class SuccessoratorTaskTest {
         int sortOrder = 1;
         Boolean isComplete = false;
 
-        SuccessoratorTask task = new SuccessoratorTask(id, name, sortOrder, isComplete, TaskType.Normal, 0);
+        SuccessoratorTask task = new SuccessoratorTask(id, name, sortOrder, isComplete, TaskType.Normal, 0, 0, TaskInterval.Daily);
 
         assertEquals(id, task.getId());
         assertEquals(name, task.getName());
@@ -24,7 +24,7 @@ public class SuccessoratorTaskTest {
     @Test
     public void testWithId() {
         Integer id = 1;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily);
 
         SuccessoratorTask updatedTask = task.withId(id);
 
@@ -37,7 +37,7 @@ public class SuccessoratorTaskTest {
     @Test
     public void testWithSortOrder() {
         int sortOrder = 2;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily);
 
         SuccessoratorTask updatedTask = task.withSortOrder(sortOrder);
 
@@ -50,7 +50,7 @@ public class SuccessoratorTaskTest {
     @Test
     public void testWithIsComplete() {
         Boolean isComplete = true;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily);
 
         SuccessoratorTask updatedTask = task.withIsComplete(isComplete);
 
@@ -63,7 +63,7 @@ public class SuccessoratorTaskTest {
     @Test
     public void testWithTaskType() {
         TaskType taskType = TaskType.Normal;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily);
 
         SuccessoratorTask updatedTask = task.withType(taskType);
 
@@ -77,7 +77,7 @@ public class SuccessoratorTaskTest {
     @Test
     public void testWithDueDate() {
         long dueDate = 0;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 1);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 1, 1, TaskInterval.Daily);
 
         SuccessoratorTask updatedTask = task.withDueDate(dueDate);
 

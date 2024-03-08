@@ -34,7 +34,7 @@ public class SuccessoratorTaskEntity {
     public long dueDate;
 
     @ColumnInfo(name = "interval")
-    public String interval;
+    public String interval = TaskInterval.Daily.name();
 
     public SuccessoratorTaskEntity(@NonNull String name, int sortOrder, Boolean isComplete, String type, long createDate, long dueDate, String interval) {
         this.name = name;
