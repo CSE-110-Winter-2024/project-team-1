@@ -18,7 +18,17 @@ public class DateManager {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
+    public String getTodayDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        return "Today " + sdf.format(calendar.getTime());
+    }
 
+    public String getTomorrowDate() {
+        Calendar tomorrow = (Calendar) calendar.clone();
+        tomorrow.add(Calendar.DATE, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        return "Tomorrow " + sdf.format(tomorrow.getTime());
+    }
     public String incrementDate() {
         // Increment the date by 1
         calendar.add(Calendar.DATE, 1);
