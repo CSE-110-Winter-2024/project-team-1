@@ -38,4 +38,24 @@ public class SuccessoratorTasks {
                 .filter(task -> !task.getIsComplete())
                 .collect(java.util.stream.Collectors.toList());
     }
+
+    public static SuccessoratorTask rescheduleTask(SuccessoratorTask task) {
+        long newDate = task.getDueDate();
+        switch(task.getInterval()) { // naively add times
+            // TODO: handle this properly.
+            case Daily:
+                newDate += 86400 * 1000;
+                break;
+            case Weekly:
+                newDate += 86400 * 1000 * 7;
+                break;
+            case Monthly:
+                newDate += 86400 * 1000 * 31;
+                break;
+            case Yearly:
+                newDate += 86400 * 1000 * 365;
+                break;
+        }
+        return task.withDueDate(newDate);
+    }
 }

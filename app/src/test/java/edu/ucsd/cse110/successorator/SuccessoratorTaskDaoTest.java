@@ -24,14 +24,14 @@ public class SuccessoratorTaskDaoTest {
 
     @Test
     public void testInsert() {
-        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0);
+        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0, 0, null);
         int id = dao.insert(task);
         assertNotNull(id);
     }
 
     @Test
     public void testFind() {
-        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0);
+        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0, 0, null);
         int id = dao.insert(task);
         SuccessoratorTaskEntity retrievedTask = dao.find(id);
         assertNotNull(retrievedTask);
@@ -61,7 +61,7 @@ public class SuccessoratorTaskDaoTest {
     private List<SuccessoratorTaskEntity> createTestTasks(int count) {
         List<SuccessoratorTaskEntity> tasks = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task " + i, i, false, TaskType.Normal.name(), 0);
+            SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task " + i, i, false, TaskType.Normal.name(), 0, 0, null);
             tasks.add(task);
         }
         return tasks;
