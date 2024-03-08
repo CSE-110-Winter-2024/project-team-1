@@ -5,6 +5,7 @@ import com.sun.net.httpserver.Authenticator;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class SuccessoratorTasks {
     static final int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
@@ -60,8 +61,8 @@ public class SuccessoratorTasks {
     }
 
     public static SuccessoratorTask rescheduleTask(SuccessoratorTask task) {
-        Calendar newDate = Calendar.getInstance();
-        Calendar originalDate = Calendar.getInstance();
+        Calendar newDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Calendar originalDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         newDate.setTimeInMillis(task.getDueDate() * MILLISECONDS_IN_DAY); // necessary because no setTimeInDays method exists
         switch(task.getInterval()) {
             case Daily:
@@ -90,17 +91,15 @@ public class SuccessoratorTasks {
                 newDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, weekOfMonth);
                 break;
             case Yearly:
+                originalDate.setTimeInMillis(task.getCreateDate() * MILLISECONDS_IN_DAY);
+
                 newDate.add(Calendar.YEAR, 1);
 
-                // handle edge cases for leap year
-                int dayOfMonth = newDate.get(Calendar.DAY_OF_MONTH);
-                int month = newDate.get(Calendar.MONTH);
-                if (month == Calendar.FEBRUARY && dayOfMonth == 28) {
-                    originalDate.setTimeInMillis(task.getCreateDate() * MILLISECONDS_IN_DAY);
-                    if (originalDate.get(Calendar.DAY_OF_MONTH) == 29) {
-                        newDate.add(Calendar.DATE, 1);
-                    }
-                }
+                int dayOfMonth = originalDate.get(Calendar.DAY_OF_MONTH);
+                int month = originalDate.get(Calendar.MONTH);
+
+                newDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                newDate.set(Calendar.MONTH, month);
                 break;
         }
         return task.withDueDate(newDate.getTimeInMillis()/MILLISECONDS_IN_DAY);

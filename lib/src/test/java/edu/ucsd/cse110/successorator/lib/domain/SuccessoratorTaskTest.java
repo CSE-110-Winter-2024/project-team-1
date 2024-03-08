@@ -130,13 +130,13 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
         assertEquals(task.getType(), updatedTask.getType());
         assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(task.getDueDate() + 6, updatedTask.getDueDate());
+        assertEquals(task.getDueDate() + 7, updatedTask.getDueDate());
         assertEquals(task.getInterval(), updatedTask.getInterval());
     }
 
     @Test
     public void testRescheduleMonthlyHappy() {
-        SuccessoratorTask task = new SuccessoratorTask(null, "Monthly Task", 0, false, TaskType.Recurring, 19790, 19790, TaskInterval.Monthly);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Monthly Task", 0, false, TaskType.Recurring, 19789, 19789, TaskInterval.Monthly);
         SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
 
         assertEquals(task.getName(), updatedTask.getName());
