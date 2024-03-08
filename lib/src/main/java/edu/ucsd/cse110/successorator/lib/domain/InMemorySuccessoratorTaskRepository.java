@@ -34,7 +34,7 @@ public class InMemorySuccessoratorTaskRepository implements SuccessoratorTaskRep
 
     @Override
     public void add(SuccessoratorTask task) {
-        task = new SuccessoratorTask(nextId++, task.getName(), task.getSortOrder(), task.getIsComplete(), task.getType(), task.getDueDate());
+        task = new SuccessoratorTask(nextId++, task.getName(), task.getSortOrder(), task.getIsComplete(), task.getType(), task.getCreateDate(), task.getDueDate(), task.getInterval());
         tasks.add(task);
     }
 
