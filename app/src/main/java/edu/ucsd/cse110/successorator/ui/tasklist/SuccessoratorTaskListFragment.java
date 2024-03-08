@@ -101,6 +101,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
             if (date != null) {
                 android.util.Log.d("date", "date modified " + date);
                 activityModel.removeFinishedTasks();
+                activityModel.rescheduleTasks();
             }
         });
 
