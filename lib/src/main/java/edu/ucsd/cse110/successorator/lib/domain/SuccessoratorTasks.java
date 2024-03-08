@@ -78,7 +78,12 @@ public class SuccessoratorTasks {
                 int weekOfMonth = originalDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
 
                 // then, increment our date by a month
-                newDate.add(Calendar.MONTH, 1);
+                // we only increment if the actual week matches the expected week
+                // if it doesn't, then the previous month must have overflowed
+                // this means the month already incremented, so we avoid double incrementing
+                if (newDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) == weekOfMonth) {
+                    newDate.add(Calendar.MONTH, 1);
+                }
 
                 // next, set according day. calendar will overflow for us if necessary
                 newDate.set(Calendar.DAY_OF_WEEK, dayOfWeek);
