@@ -125,12 +125,8 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         DateManager dateManager = new DateManager();
         String currentDate = dateManager.getDate();
-        String todayDate = dateManager.getTodayDate();
-        String tomorrowDate = dateManager.getTomorrowDate();
-        List<Object> dropdownItems = new ArrayList<>();
-        dropdownItems.add(todayDate);
-        dropdownItems.add(tomorrowDate);
-        dropdownItems.addAll(Arrays.asList(TaskFilterOption.values()));
+        List<Object> dropdownItems = new ArrayList<>(Arrays.asList(TaskFilterOption.values()));
+        dropdownItems.add(0, currentDate);
 
         view.filterSpinner.setAdapter(new ArrayAdapter<>(
                 requireContext(),
