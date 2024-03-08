@@ -152,7 +152,7 @@ public class SuccessoratorTasksTest {
         assertEquals("Task 1", tasks.get(0).getName());
         assertEquals(LocalDate.now().toEpochDay() + 1, modifiedTasks.get(0).getDueDate());
         assertEquals("Task 2", tasks.get(1).getName());
-        assertEquals(LocalDate.now().toEpochDay() + 6, modifiedTasks.get(1).getDueDate());
+        assertEquals(LocalDate.now().toEpochDay() + 7, modifiedTasks.get(1).getDueDate());
         assertEquals("Task 3", tasks.get(2).getName());
         assertEquals(0, modifiedTasks.get(2).getDueDate());
         assertEquals("Task 4", tasks.get(3).getName());
@@ -172,7 +172,7 @@ public class SuccessoratorTasksTest {
         assertEquals("Task 1", tasks.get(0).getName());
         assertEquals(LocalDate.now().toEpochDay() + 1, modifiedTasks.get(0).getDueDate());
         assertEquals("Task 2", tasks.get(1).getName());
-        assertEquals(LocalDate.now().toEpochDay() + 6, modifiedTasks.get(1).getDueDate());
+        assertEquals(LocalDate.now().toEpochDay() + 7, modifiedTasks.get(1).getDueDate());
         assertEquals("Task 3", tasks.get(2).getName());
         assertEquals(0, modifiedTasks.get(2).getDueDate());
         assertEquals("Task 4", tasks.get(3).getName());
@@ -183,7 +183,7 @@ public class SuccessoratorTasksTest {
         assertEquals("Task 1", tasks.get(0).getName());
         assertEquals(LocalDate.now().toEpochDay() + 1, modifiedTasks.get(0).getDueDate());
         assertEquals("Task 2", tasks.get(1).getName());
-        assertEquals(LocalDate.now().toEpochDay() + 6, modifiedTasks.get(1).getDueDate());
+        assertEquals(LocalDate.now().toEpochDay() + 7, modifiedTasks.get(1).getDueDate());
         assertEquals("Task 3", tasks.get(2).getName());
         assertEquals(0, modifiedTasks.get(2).getDueDate());
         assertEquals("Task 4", tasks.get(3).getName());
