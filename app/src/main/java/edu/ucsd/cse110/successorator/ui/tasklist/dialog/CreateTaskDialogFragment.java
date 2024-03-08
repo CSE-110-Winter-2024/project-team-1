@@ -98,7 +98,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
         }
 
-        TaskInterval taskInterval = null;
+        TaskInterval taskInterval = TaskInterval.Daily;
         /*switch (activityModel.getSelectedFilter()) {
             case Daily:
                 taskInterval = taskInterval.Daily;

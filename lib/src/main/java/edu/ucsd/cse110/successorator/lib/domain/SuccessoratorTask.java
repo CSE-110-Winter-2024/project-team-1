@@ -14,11 +14,11 @@ public class SuccessoratorTask {
 
     private final @NonNull TaskType type;
 
-    private final @Nullable long createDate;
+    private final @NonNull long createDate;
 
     private final @NonNull long dueDate;
 
-    private final @Nullable TaskInterval interval;
+    private final @NonNull TaskInterval interval;
 
 
     public SuccessoratorTask(@Nullable Integer id, @NonNull String name, int sortOrder, @NonNull Boolean isComplete, @NonNull TaskType type, @Nullable long createDate, @NonNull long dueDate, TaskInterval interval) {

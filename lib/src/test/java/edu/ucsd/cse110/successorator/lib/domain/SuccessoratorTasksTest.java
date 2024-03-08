@@ -12,9 +12,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testToggleCompleteStart() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 0);
 
@@ -27,9 +27,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testToggleCompleteMiddle() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 1);
 
@@ -42,9 +42,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testToggleCompleteEnd() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 2);
 
@@ -57,9 +57,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testToggleCompleteTwice() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 1);
         modifiedTasks = SuccessoratorTasks.toggleComplete(modifiedTasks, 1);
@@ -74,9 +74,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testRemoveCompletedTasksOnce() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, true, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, true, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
 
         assertEquals(2, modifiedTasks.size());
@@ -87,16 +87,16 @@ public class SuccessoratorTasksTest {
     @Test
     public void testRemoveCompletedTasksTwice() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, true, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, true, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
 
         assertEquals(2, modifiedTasks.size());
         assertEquals("Task 2", modifiedTasks.get(0).getName());
 
         var expected = modifiedTasks.toArray();
-        modifiedTasks.add(new SuccessoratorTask(4, "Task 4", 3, true, TaskType.Normal, 0));
+        modifiedTasks.add(new SuccessoratorTask(4, "Task 4", 3, true, TaskType.Normal, 0, 0, TaskInterval.Daily));
         modifiedTasks = SuccessoratorTasks.removeCompletedTasks(modifiedTasks);
 
         assertArrayEquals(expected, modifiedTasks.toArray());
@@ -106,9 +106,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testUntoggle() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, true, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, true, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 2);
 
@@ -123,9 +123,9 @@ public class SuccessoratorTasksTest {
     @Test
     public void testDoubleToggle() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
         List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.toggleComplete(tasks, 1);
         modifiedTasks = SuccessoratorTasks.toggleComplete(modifiedTasks, 2);
