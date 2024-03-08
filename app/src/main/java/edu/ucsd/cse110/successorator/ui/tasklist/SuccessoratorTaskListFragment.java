@@ -31,6 +31,12 @@ import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment
 import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class SuccessoratorTaskListFragment extends Fragment {
+    public enum TaskRecurrence {
+        ONE_TIME, DAILY, WEEKLY, MONTHLY, YEARLY
+
+    }
+    private static final List<String> RECURRENCE_OPTIONS = Arrays.asList("One Time", "Daily", "Weekly", "Monthly", "Yearly");
+
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
@@ -125,7 +131,11 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         DateManager dateManager = new DateManager();
         String currentDate = dateManager.getDate();
-        List<Object> dropdownItems = new ArrayList<>(Arrays.asList(TaskFilterOption.values()));
+
+
+        List<String> recurrenceOptionsList = Arrays.asList(RECURRENCE_OPTIONS.toString());
+        List<Object> dropdownItems = new ArrayList<>(recurrenceOptionsList);
+        dropdownItems.addAll(Arrays.asList(TaskFilterOption.values()));
         dropdownItems.add(0, currentDate);
 
         view.filterSpinner.setAdapter(new ArrayAdapter<>(
@@ -133,6 +143,8 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item,
                 dropdownItems
         ));
+
+        view.filterSpinner.setAdapter(adapter);
 
         view.filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
