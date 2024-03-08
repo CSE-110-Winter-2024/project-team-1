@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
@@ -47,6 +48,10 @@ public class CreateTaskDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogCreateTaskBinding.inflate(getLayoutInflater());
+
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            view.filterRadioGroup.setVisibility(View.VISIBLE);
+        }
 
         var dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Task")
