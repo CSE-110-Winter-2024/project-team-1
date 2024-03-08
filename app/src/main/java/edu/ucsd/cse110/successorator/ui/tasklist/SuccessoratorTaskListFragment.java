@@ -141,10 +141,8 @@ public class SuccessoratorTaskListFragment extends Fragment {
         view.filterSpinner.setAdapter(new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                dropdownItems
+                TaskFilterOption.values()
         ));
-
-        view.filterSpinner.setAdapter(adapter);
 
         view.filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
