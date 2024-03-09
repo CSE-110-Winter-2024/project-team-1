@@ -13,7 +13,7 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterToday() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, LocalDate.now().toEpochDay(), 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, LocalDate.now().toEpochDay(), LocalDate.now().toEpochDay(), TaskInterval.Daily));
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
 
