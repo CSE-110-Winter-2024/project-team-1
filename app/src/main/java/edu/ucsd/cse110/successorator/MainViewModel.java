@@ -92,6 +92,17 @@ public class MainViewModel extends ViewModel {
         this.orderedTasks.setValue(newTasks);
     }
 
+    public void rescheduleTasks() {
+        var tasks = this.orderedTasks.getValue();
+        if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
+            return;
+        }
+        var newTasks = SuccessoratorTasks.rescheduleTasks(tasks);
+        taskRepository.save(newTasks);
+        this.orderedTasks.setValue(newTasks);
+    }
+
     public void changeFilter(TaskFilterOption filter) {
         this.selectedFilter = filter;
         var tasks = this.unfilteredTasks.getValue();
