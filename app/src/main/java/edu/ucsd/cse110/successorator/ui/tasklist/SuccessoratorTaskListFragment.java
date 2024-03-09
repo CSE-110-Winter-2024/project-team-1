@@ -131,7 +131,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
         });
 
         DateManager dateManager = new DateManager();
-        String currentDate = dateManager.getDate();
+        TaskFilterOption currentDate = TaskFilterOption.valueOf(dateManager.getDate());
 
 
         List<String> recurrenceOptionsList = Arrays.asList(RECURRENCE_OPTIONS.toString());
@@ -144,6 +144,8 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item,
                 TaskFilterOption.values()
         ));
+
+        view.filterSpinner.setAdapter(adapter);
 
         view.filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
