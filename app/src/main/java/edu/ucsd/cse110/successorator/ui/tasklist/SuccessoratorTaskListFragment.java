@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
@@ -30,6 +31,12 @@ import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment
 import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class SuccessoratorTaskListFragment extends Fragment {
+    public enum TaskRecurrence {
+        ONE_TIME, DAILY, WEEKLY, MONTHLY, YEARLY
+
+    }
+    private static final List<String> RECURRENCE_OPTIONS = Arrays.asList("One Time", "Daily", "Weekly", "Monthly", "Yearly");
+
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
@@ -94,6 +101,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
             if (date != null) {
                 android.util.Log.d("date", "date modified " + date);
                 activityModel.removeFinishedTasks();
+                activityModel.rescheduleTasks();
             }
         });
 
@@ -122,6 +130,14 @@ public class SuccessoratorTaskListFragment extends Fragment {
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
 
+        DateManager dateManager = new DateManager();
+        String currentDate = dateManager.getDate();
+
+
+        List<String> recurrenceOptionsList = Arrays.asList(RECURRENCE_OPTIONS.toString());
+        List<Object> dropdownItems = new ArrayList<>(recurrenceOptionsList);
+        dropdownItems.addAll(Arrays.asList(TaskFilterOption.values()));
+        dropdownItems.add(0, currentDate);
 
         view.filterSpinner.setAdapter(new ArrayAdapter<>(
                 requireContext(),
