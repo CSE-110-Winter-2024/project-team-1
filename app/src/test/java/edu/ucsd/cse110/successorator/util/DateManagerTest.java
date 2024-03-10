@@ -3,15 +3,24 @@ package edu.ucsd.cse110.successorator.util;
 
 import static junit.framework.TestCase.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class DateManagerTest {
+    private Calendar calendar;
+    private DateManager dateManager;
+    @Before
+    public void setUp() {
+        calendar = new GregorianCalendar(2024, Calendar.MARCH, 8);
+        dateManager = new DateManager(calendar);
+    }
+
     @Test
     public void testGetDate() {
-        DateManager dateManager = new DateManager();
         String date = dateManager.getDate();
 
         // Assert that the date is not null
@@ -20,12 +29,22 @@ public class DateManagerTest {
         // Assert that the date is not empty
         assertEquals(false, date.isEmpty());
 
-        Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new java.text.SimpleDateFormat(dateManager.getDateFormatConstant(), java.util.Locale.getDefault());
         String expectedDate = sdf.format(calendar.getTime());
 
         // Assert that the date is the same as the expected date
         assertEquals(expectedDate, date);
+    }
+
+    @Test
+    public void testGetDateFromFormattedString() {
+        assertEquals(calendar.getTimeInMillis(), dateManager.getDateFromFormattedString("March 8, 2024"));
+
+    }
+
+    @Test
+    public void testGetTomorrow() {
+        assertEquals(", Sat 3/9", dateManager.getTomorrow());
     }
 
     @Test

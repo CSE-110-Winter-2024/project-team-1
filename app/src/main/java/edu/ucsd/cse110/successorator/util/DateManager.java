@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateManager {
-    private static final String DATE_FORMAT = "EEEE M/d";
+    private static final String DATE_FORMAT = ", E M/d";
     private static final String LONG_DATE_FORMAT = "MMMM d, yyyy";
 
     private Calendar calendar = Calendar.getInstance();
@@ -43,6 +43,13 @@ public class DateManager {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public String getTomorrow() {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        var tomorrowCalendar = (Calendar) calendar.clone();
+        tomorrowCalendar.add(Calendar.DATE, 1);
+        return sdf.format(tomorrowCalendar.getTime());
     }
 
     public String incrementDate() {

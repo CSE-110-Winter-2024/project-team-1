@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
-import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
@@ -31,12 +30,6 @@ import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment
 import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class SuccessoratorTaskListFragment extends Fragment {
-    public enum TaskRecurrence {
-        ONE_TIME, DAILY, WEEKLY, MONTHLY, YEARLY
-
-    }
-    private static final List<String> RECURRENCE_OPTIONS = Arrays.asList("One Time", "Daily", "Weekly", "Monthly", "Yearly");
-
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
@@ -130,27 +123,38 @@ public class SuccessoratorTaskListFragment extends Fragment {
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
 
-        DateManager dateManager = new DateManager();
-        TaskFilterOption currentDate = TaskFilterOption.valueOf(dateManager.getDate());
+        final List<Object> dropdownItems = new ArrayList<>(Arrays.asList(TaskFilterOption.values()));
+        dropdownItems.set(0, TaskFilterOption.values()[0] + dateManager.getDate());
+        dropdownItems.set(1, TaskFilterOption.values()[1] + dateManager.getTomorrow());
 
-
-        List<String> recurrenceOptionsList = Arrays.asList(RECURRENCE_OPTIONS.toString());
-        List<Object> dropdownItems = new ArrayList<>(recurrenceOptionsList);
-        dropdownItems.addAll(Arrays.asList(TaskFilterOption.values()));
-        dropdownItems.add(0, currentDate);
-
-        view.filterSpinner.setAdapter(new ArrayAdapter<>(
+        var spinnerAdapter = new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                TaskFilterOption.values()
-        ));
+                dropdownItems
+        ) {
+            // override to center text
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                view.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                return view;
+            }
+        };
+        view.filterSpinner.setAdapter(spinnerAdapter);
 
-        view.filterSpinner.setAdapter(adapter);
+        date.observe(date -> {
+            if (date != null) {
+                dropdownItems.set(0, TaskFilterOption.values()[0] + dateManager.getDate());
+                dropdownItems.set(1, TaskFilterOption.values()[1] + dateManager.getTomorrow());
+                spinnerAdapter.notifyDataSetChanged();
+            }
+        });
 
         view.filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TaskFilterOption selectedOption = (TaskFilterOption) parent.getItemAtPosition(position);
+                TaskFilterOption selectedOption = TaskFilterOption.values()[position];
                 activityModel.changeFilter(selectedOption);
             }
 
@@ -166,7 +170,19 @@ public class SuccessoratorTaskListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        activityModel.getOrderedTasks().observe(dateObserver);
+        dateManager = new DateManager();
+        if (activityModel.getOrderedTasks().getValue() == null) {
+            // make sure date is changed after orderedTasks are created
+            activityModel.getOrderedTasks().observe(dateObserver);
+        }
+        else {
+            // also update date on resume
+            var currDate = dateManager.getDate();
+            var prevDate = sharedPreferences.getString("prevDate", "");
+            sharedPreferences.edit().putString("prevDate", currDate).apply();
+            if (!prevDate.equals("") && !prevDate.equals(currDate)) {
+                date.setValue(dateManager.getDate());
+            }
+        }
     }
-
 }
