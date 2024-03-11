@@ -24,6 +24,7 @@ import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateTaskBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.domain.TaskInterval;
 import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.util.DateManager;
@@ -144,7 +145,9 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
         }
 
-        var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval);
+        TaskContext context = TaskContext.Home;
+
+        var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval, context);
 
         activityModel.add(task);
 
