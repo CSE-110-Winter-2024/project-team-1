@@ -33,25 +33,28 @@
             android:id="@+id/Home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/teal_200"
+            android:background="#FFE600"
             android:text="H" />
-
-        <Button
-            android:id="@+id/School"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="S" />
 
         <Button
             android:id="@+id/Work"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_200"
             android:text="W" />
+
+        <Button
+            android:id="@+id/School"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_200"
+            android:text="S" />
 
         <Button
             android:id="@+id/Errands"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#0BBA0E"
             android:text="E" />
     </RadioGroup>
 
