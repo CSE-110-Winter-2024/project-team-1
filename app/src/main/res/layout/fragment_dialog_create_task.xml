@@ -20,13 +20,48 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
+        android:id="@+id/contextRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/filterRadioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_name_entry">
+
+        <Button
+            android:id="@+id/Home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="H" />
+
+        <Button
+            android:id="@+id/School"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="S" />
+
+        <Button
+            android:id="@+id/Work"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="W" />
+
+        <Button
+            android:id="@+id/Errands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="E" />
+    </RadioGroup>
+
+    <RadioGroup
         android:id="@+id/filterRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_name_entry">
+        app:layout_constraintTop_toBottomOf="@+id/contextRadioGroup" >
 
         <RadioButton
             android:id="@+id/daily"
