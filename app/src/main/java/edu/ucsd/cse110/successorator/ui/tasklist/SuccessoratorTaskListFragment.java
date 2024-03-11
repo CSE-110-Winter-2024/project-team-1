@@ -25,7 +25,9 @@ import java.util.Objects;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContextMenuOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
@@ -191,12 +193,16 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("Task Options");
-        menu.add(0, v.getId(), 0, "Move to today");
-        menu.add(0, v.getId(), 0, "Move to tomorrow");
-        menu.add(0, v.getId(), 0, "Finish");
-        menu.add(0, v.getId(), 0, "Delete");
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Pending || activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            menu.setHeaderTitle("Task Options");
+            if (activityModel.getSelectedFilter() == TaskFilterOption.Pending) {
+                menu.add(0, v.getId(), 0, TaskContextMenuOption.MoveToToday.getTitle());
+                menu.add(0, v.getId(), 0, TaskContextMenuOption.MoveToTomorrow.getTitle());
+                menu.add(0, v.getId(), 0, TaskContextMenuOption.Finish.getTitle());
+            }
+            menu.add(0, v.getId(), 0, TaskContextMenuOption.Delete.getTitle());
+        }
     }
 
     @Override
@@ -207,16 +213,19 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         assert task != null;
 
-        if (item.getTitle() == "Move to today") {
+        if (item.getTitle() == TaskContextMenuOption.MoveToToday.getTitle()) {
             // Implement move to today action
             activityModel.rescheduleTaskToToday(task.getSortOrder());
-        } else if (item.getTitle() == "Move to tomorrow") {
+        } else if (item.getTitle() == TaskContextMenuOption.MoveToTomorrow.getTitle()) {
             // Implement move to tomorrow action
             activityModel.rescheduleTaskToTomorrow(task.getSortOrder());
-        } else if (item.getTitle() == "Finish") {
+        } else if (item.getTitle() == TaskContextMenuOption.Finish.getTitle()) {
+            if (task.getType() == TaskType.Pending) {
+                activityModel.rescheduleTaskToToday(task.getSortOrder());
+            }
             // Implement finish task action
             activityModel.markComplete(task.getSortOrder());
-        } else if (item.getTitle() == "Delete") {
+        } else if (item.getTitle() == TaskContextMenuOption.Delete.getTitle()) {
             // Implement delete task action
             activityModel.removeTask(task.getSortOrder());
         } else {

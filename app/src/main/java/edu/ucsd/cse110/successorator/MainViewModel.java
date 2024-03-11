@@ -77,37 +77,37 @@ public class MainViewModel extends ViewModel {
     public void removeTask(int sortOrder) {
         var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
             return;
         }
         var newTasks = SuccessoratorTasks.deleteTask(tasks, sortOrder);
         taskRepository.save(newTasks);
 
-        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
-        this.orderedTasks.setValue(filtertedTasks);
+        applyFilter(newTasks);
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
         var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
             return;
         }
         var newTasks = SuccessoratorTasks.rescheduleTaskToToday(tasks, sortOrder);
         taskRepository.save(newTasks);
 
-        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
-        this.orderedTasks.setValue(filtertedTasks);
+        applyFilter(newTasks);
     }
 
     public void rescheduleTaskToTomorrow(int sortOrder) {
         var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
             return;
         }
         var newTasks = SuccessoratorTasks.rescheduleTaskToTomorrow(tasks, sortOrder);
         taskRepository.save(newTasks);
 
-        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
-        this.orderedTasks.setValue(filtertedTasks);
+        applyFilter(newTasks);
     }
 
     public void markComplete(int sortOrder) {
@@ -115,8 +115,7 @@ public class MainViewModel extends ViewModel {
         var newTasks = SuccessoratorTasks.toggleComplete(tasks, sortOrder);
         taskRepository.save(newTasks);
 
-        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
-        this.orderedTasks.setValue(filtertedTasks);
+        applyFilter(newTasks);
     }
 
     public void removeFinishedTasks() {
@@ -128,32 +127,38 @@ public class MainViewModel extends ViewModel {
         var newTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
         taskRepository.save(newTasks);
 
-        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
-        this.orderedTasks.setValue(filtertedTasks);
+        applyFilter(newTasks);
     }
 
     public void rescheduleTasks() {
-        var tasks = this.orderedTasks.getValue();
+        var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
             android.util.Log.d("tasks", "is null");
             return;
         }
         var newTasks = SuccessoratorTasks.rescheduleTasks(tasks);
         taskRepository.save(newTasks);
-        this.orderedTasks.setValue(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void changeFilter(TaskFilterOption filter) {
         this.selectedFilter = filter;
         var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
             return;
         }
-        var newTasks = SuccessoratorTasksFilterer.filterTasks(filter, tasks);
-        this.orderedTasks.setValue(newTasks);
+        
+        applyFilter(tasks);
     }
 
     public TaskFilterOption getSelectedFilter() {
         return selectedFilter;
+    }
+
+    private void applyFilter(List<SuccessoratorTask> tasks) {
+        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        this.orderedTasks.setValue(newTasks);
     }
 }
