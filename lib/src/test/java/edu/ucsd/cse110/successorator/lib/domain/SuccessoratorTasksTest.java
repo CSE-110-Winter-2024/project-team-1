@@ -189,4 +189,73 @@ public class SuccessoratorTasksTest {
         assertEquals("Task 4", tasks.get(3).getName());
         assertEquals(0, modifiedTasks.get(3).getDueDate());
     }
+
+    @Test
+    public void testDeleteTask() {
+        // Test deleting task at start
+        List<SuccessoratorTask> tasks = createTasks();
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.deleteTask(new ArrayList<>(tasks), 0);
+        assertEquals(2, modifiedTasks.size());
+        assertEquals("Task 2", modifiedTasks.get(0).getName());
+
+        // Test deleting task at middle
+        tasks = createTasks();
+        modifiedTasks = SuccessoratorTasks.deleteTask(new ArrayList<>(tasks), 1);
+        assertEquals(2, modifiedTasks.size());
+        assertEquals("Task 1", modifiedTasks.get(0).getName());
+        assertEquals("Task 3", modifiedTasks.get(1).getName());
+
+        // Test deleting task at end
+        tasks = createTasks();
+        modifiedTasks = SuccessoratorTasks.deleteTask(new ArrayList<>(tasks), 2);
+        assertEquals(2, modifiedTasks.size());
+        assertEquals("Task 1", modifiedTasks.get(0).getName());
+        assertEquals("Task 2", modifiedTasks.get(1).getName());
+    }
+
+    @Test
+    public void testRescheduleTaskToToday() {
+        // Test rescheduling task at start
+        List<SuccessoratorTask> tasks = createTasks();
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.rescheduleTaskToToday(new ArrayList<>(tasks), 0);
+        assertEquals(LocalDate.now().toEpochDay(), modifiedTasks.get(0).getDueDate());
+
+        // Test rescheduling pending task
+        tasks = createTasks();
+        modifiedTasks = SuccessoratorTasks.rescheduleTaskToToday(new ArrayList<>(tasks), 1);
+        assertEquals(LocalDate.now().toEpochDay(), modifiedTasks.get(1).getDueDate());
+        assertEquals(TaskType.Normal, modifiedTasks.get(1).getType());
+
+        // Test rescheduling task at end
+        tasks = createTasks();
+        modifiedTasks = SuccessoratorTasks.rescheduleTaskToToday(new ArrayList<>(tasks), 2);
+        assertEquals(LocalDate.now().toEpochDay(), modifiedTasks.get(2).getDueDate());
+    }
+
+    @Test
+    public void testRescheduleTaskToTomorrow() {
+        // Test rescheduling task at start
+        List<SuccessoratorTask> tasks = createTasks();
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.rescheduleTaskToTomorrow(new ArrayList<>(tasks), 0);
+        assertEquals(LocalDate.now().plusDays(1).toEpochDay(), modifiedTasks.get(0).getDueDate());
+
+        // Test rescheduling pending task
+        tasks = createTasks();
+        modifiedTasks = SuccessoratorTasks.rescheduleTaskToTomorrow(new ArrayList<>(tasks), 1);
+        assertEquals(LocalDate.now().plusDays(1).toEpochDay(), modifiedTasks.get(1).getDueDate());
+        assertEquals(TaskType.Normal, modifiedTasks.get(1).getType());
+
+        // Test rescheduling task at end
+        tasks = createTasks();
+        modifiedTasks = SuccessoratorTasks.rescheduleTaskToTomorrow(new ArrayList<>(tasks), 2);
+        assertEquals(LocalDate.now().plusDays(1).toEpochDay(), modifiedTasks.get(2).getDueDate());
+    }
+
+    private List<SuccessoratorTask> createTasks() {
+        List<SuccessoratorTask> tasks = new ArrayList<>();
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        return tasks;
+    }
 }
