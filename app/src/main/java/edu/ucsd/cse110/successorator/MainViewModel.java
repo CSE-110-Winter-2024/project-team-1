@@ -74,22 +74,62 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
     }
 
+    public void removeTask(int sortOrder) {
+        var tasks = this.unfilteredTasks.getValue();
+        if (tasks == null) {
+            return;
+        }
+        var newTasks = SuccessoratorTasks.deleteTask(tasks, sortOrder);
+        taskRepository.save(newTasks);
+
+        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
+        this.orderedTasks.setValue(filtertedTasks);
+    }
+
+    public void rescheduleTaskToToday(int sortOrder) {
+        var tasks = this.unfilteredTasks.getValue();
+        if (tasks == null) {
+            return;
+        }
+        var newTasks = SuccessoratorTasks.rescheduleTaskToToday(tasks, sortOrder);
+        taskRepository.save(newTasks);
+
+        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
+        this.orderedTasks.setValue(filtertedTasks);
+    }
+
+    public void rescheduleTaskToTomorrow(int sortOrder) {
+        var tasks = this.unfilteredTasks.getValue();
+        if (tasks == null) {
+            return;
+        }
+        var newTasks = SuccessoratorTasks.rescheduleTaskToTomorrow(tasks, sortOrder);
+        taskRepository.save(newTasks);
+
+        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
+        this.orderedTasks.setValue(filtertedTasks);
+    }
+
     public void markComplete(int sortOrder) {
-        var tasks = this.orderedTasks.getValue();
+        var tasks = this.unfilteredTasks.getValue();
         var newTasks = SuccessoratorTasks.toggleComplete(tasks, sortOrder);
         taskRepository.save(newTasks);
-        this.orderedTasks.setValue(newTasks);
+
+        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
+        this.orderedTasks.setValue(filtertedTasks);
     }
 
     public void removeFinishedTasks() {
-        var tasks = this.orderedTasks.getValue();
+        var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
             android.util.Log.d("tasks", "is null");
             return;
         }
         var newTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
         taskRepository.save(newTasks);
-        this.orderedTasks.setValue(newTasks);
+
+        var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
+        this.orderedTasks.setValue(filtertedTasks);
     }
 
     public void rescheduleTasks() {

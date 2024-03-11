@@ -4,7 +4,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
@@ -163,7 +166,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 // Do nothing if nothing is selected
             }
         });
-
+        registerForContextMenu(view.taskList);
         return view.getRoot();
     }
 
@@ -184,5 +187,41 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 date.setValue(dateManager.getDate());
             }
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Task Options");
+        menu.add(0, v.getId(), 0, "Move to today");
+        menu.add(0, v.getId(), 0, "Move to tomorrow");
+        menu.add(0, v.getId(), 0, "Finish");
+        menu.add(0, v.getId(), 0, "Delete");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        SuccessoratorTask task = adapter.getItem(position);
+
+        assert task != null;
+
+        if (item.getTitle() == "Move to today") {
+            // Implement move to today action
+            activityModel.rescheduleTaskToToday(task.getSortOrder());
+        } else if (item.getTitle() == "Move to tomorrow") {
+            // Implement move to tomorrow action
+            activityModel.rescheduleTaskToTomorrow(task.getSortOrder());
+        } else if (item.getTitle() == "Finish") {
+            // Implement finish task action
+            activityModel.markComplete(task.getSortOrder());
+        } else if (item.getTitle() == "Delete") {
+            // Implement delete task action
+            activityModel.removeTask(task.getSortOrder());
+        } else {
+            return false;
+        }
+        return true;
     }
 }
