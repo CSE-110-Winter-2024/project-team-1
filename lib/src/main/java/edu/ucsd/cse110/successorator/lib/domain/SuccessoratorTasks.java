@@ -102,6 +102,6 @@ public class SuccessoratorTasks {
                 newDate.set(Calendar.MONTH, month);
                 break;
         }
-        return task.withDueDate(newDate.getTimeInMillis()/MILLISECONDS_IN_DAY);
+        return task.withDueDate(newDate.getTimeInMillis()/MILLISECONDS_IN_DAY).withIsComplete(false);
     }
 }
