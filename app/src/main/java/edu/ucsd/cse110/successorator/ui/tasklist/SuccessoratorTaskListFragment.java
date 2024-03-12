@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
@@ -161,6 +165,52 @@ public class SuccessoratorTaskListFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing if nothing is selected
+            }
+        });
+
+        RadioGroup contextRadioGroup = view.getRoot().findViewById(R.id.contextRadioGroup);
+        ImageButton errandsButton = view.getRoot().findViewById(R.id.errands);
+        ImageButton schoolButton = view.getRoot().findViewById(R.id.school);
+        ImageButton workButton = view.getRoot().findViewById(R.id.work);
+        ImageButton homeButton = view.getRoot().findViewById(R.id.home);
+
+        contextRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int buttonId) {
+                // Determine which ImageButton is selected
+                switch (buttonId) {
+                    case R.id.errands:
+                        errandsButton.setImageResource(R.drawable.selected_image); // selected errands icon
+                        schoolButton.setImageResource(R.drawable.unselected_image); // unselected school icon
+                        workButton.setImageResource(R.drawable.unselected_image); // unselected work icon
+                        homeButton.setImageResource(R.drawable.unselected_image); // unselected home icon
+                        activityModel.changeContext(TaskContext.Errands);
+                        break;
+                    case R.id.school:
+                        schoolButton.setImageResource(R.drawable.selected_image); // selected school icon
+                        errandsButton.setImageResource(R.drawable.unselected_image); // unselected errands icon
+                        workButton.setImageResource(R.drawable.unselected_image); // unselected work icon
+                        homeButton.setImageResource(R.drawable.unselected_image); // unselected home icon
+                        activityModel.changeContext(TaskContext.School);
+                        break;
+                    case R.id.work:
+                        workButton.setImageResource(R.drawable.selected_image); // selected work icon
+                        errandsButton.setImageResource(R.drawable.unselected_image); // unselected errands icon
+                        schoolButton.setImageResource(R.drawable.unselected_image); // unselected school icon
+                        homeButton.setImageResource(R.drawable.unselected_image); // unselected home icon
+                        activityModel.changeContext(TaskContext.Work);
+                        break;
+                    case R.id.home:
+                        homeButton.setImageResource(R.drawable.selected_image); // selected home icon
+                        errandsButton.setImageResource(R.drawable.unselected_image); // unselected errands icon
+                        workButton.setImageResource(R.drawable.unselected_image); // unselected work icon
+                        schoolButton.setImageResource(R.drawable.unselected_image); // unselected school icon
+                        activityModel.changeContext(TaskContext.Home);
+                        break;
+                    default:
+                        activityModel.changeContext(TaskContext.None);
+                        break;
+                }
             }
         });
 

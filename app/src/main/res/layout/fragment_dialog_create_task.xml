@@ -29,33 +29,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_name_entry">
 
-        <Button
-            android:id="@+id/Home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFE600"
-            android:text="H" />
-
-        <Button
-            android:id="@+id/Work"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/teal_200"
-            android:text="W" />
-
-        <Button
-            android:id="@+id/School"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/purple_200"
-            android:text="S" />
-
-        <Button
-            android:id="@+id/Errands"
+        <ImageButton
+            android:id="@+id/errands"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#0BBA0E"
-            android:text="E" />
+            android:layout_weight="1"
+            android:src="@android:drawable/btn_star" />
+
+        <ImageButton
+            android:id="@+id/school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/btn_star" />
+
+        <ImageButton
+            android:id="@+id/work"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/btn_star" />
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/btn_star" />
     </RadioGroup>
 
     <RadioGroup

@@ -14,6 +14,7 @@ import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTaskRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasksFilterer;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -27,6 +28,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<SuccessoratorTask>> unfilteredTasks;
 
     private TaskFilterOption selectedFilter = TaskFilterOption.Today;
+    private TaskContext selectedContext;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -56,6 +58,7 @@ public class MainViewModel extends ViewModel {
                 this.unfilteredTasks.setValue(newTasks);
             }
         });
+        this.selectedContext = TaskContext.None;
     }
 
     public Subject<List<SuccessoratorTask>> getOrderedTasks() {
@@ -115,5 +118,13 @@ public class MainViewModel extends ViewModel {
 
     public TaskFilterOption getSelectedFilter() {
         return selectedFilter;
+    }
+
+    public void changeContext(TaskContext context) {
+        this.selectedContext = context;
+    }
+
+    public TaskContext getSelectedContext() {
+        return selectedContext;
     }
 }
