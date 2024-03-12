@@ -208,7 +208,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
                         activityModel.changeContext(TaskContext.Home);
                         break;
                     default:
-                        activityModel.changeContext(TaskContext.None);
                         break;
                 }
             }
