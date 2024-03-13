@@ -4,18 +4,22 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,52 +171,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 // Do nothing if nothing is selected
             }
         });
-
-        RadioGroup contextRadioGroup = view.getRoot().findViewById(R.id.contextRadioGroup);
-        ImageButton errandsButton = view.getRoot().findViewById(R.id.errands);
-        ImageButton schoolButton = view.getRoot().findViewById(R.id.school);
-        ImageButton workButton = view.getRoot().findViewById(R.id.work);
-        ImageButton homeButton = view.getRoot().findViewById(R.id.home);
-
-        contextRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int buttonId) {
-                // Determine which ImageButton is selected
-                switch (buttonId) {
-                    case R.id.errands:
-                        errandsButton.setImageResource(R.drawable.selected_image); // selected errands icon
-                        schoolButton.setImageResource(R.drawable.unselected_image); // unselected school icon
-                        workButton.setImageResource(R.drawable.unselected_image); // unselected work icon
-                        homeButton.setImageResource(R.drawable.unselected_image); // unselected home icon
-                        activityModel.changeContext(TaskContext.Errands);
-                        break;
-                    case R.id.school:
-                        schoolButton.setImageResource(R.drawable.selected_image); // selected school icon
-                        errandsButton.setImageResource(R.drawable.unselected_image); // unselected errands icon
-                        workButton.setImageResource(R.drawable.unselected_image); // unselected work icon
-                        homeButton.setImageResource(R.drawable.unselected_image); // unselected home icon
-                        activityModel.changeContext(TaskContext.School);
-                        break;
-                    case R.id.work:
-                        workButton.setImageResource(R.drawable.selected_image); // selected work icon
-                        errandsButton.setImageResource(R.drawable.unselected_image); // unselected errands icon
-                        schoolButton.setImageResource(R.drawable.unselected_image); // unselected school icon
-                        homeButton.setImageResource(R.drawable.unselected_image); // unselected home icon
-                        activityModel.changeContext(TaskContext.Work);
-                        break;
-                    case R.id.home:
-                        homeButton.setImageResource(R.drawable.selected_image); // selected home icon
-                        errandsButton.setImageResource(R.drawable.unselected_image); // unselected errands icon
-                        workButton.setImageResource(R.drawable.unselected_image); // unselected work icon
-                        schoolButton.setImageResource(R.drawable.unselected_image); // unselected school icon
-                        activityModel.changeContext(TaskContext.Home);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
         return view.getRoot();
     }
 

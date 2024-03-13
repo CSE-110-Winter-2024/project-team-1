@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.time.LocalDate;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateTaskBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
@@ -145,7 +146,21 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
         }
 
-        TaskContext context = activityModel.getSelectedContext();
+        TaskContext context = TaskContext.Home;
+
+        int selectedContext = view.contextRadioGroup.getCheckedRadioButtonId();
+        if (selectedContext == R.id.home) {
+            context = TaskContext.Home;
+        }
+        else if (selectedContext == R.id.school) {
+            context = TaskContext.School;
+        }
+        else if (selectedContext == R.id.errands) {
+            context = TaskContext.Errands;
+        }
+        else if (selectedContext == R.id.work) {
+            context = TaskContext.Work;
+        }
 
         var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval, context);
 

@@ -58,7 +58,7 @@ public class MainViewModel extends ViewModel {
                 this.unfilteredTasks.setValue(newTasks);
             }
         });
-        this.selectedContext = TaskContext.None;
+        this.selectedContext = TaskContext.Home;
     }
 
     public Subject<List<SuccessoratorTask>> getOrderedTasks() {
