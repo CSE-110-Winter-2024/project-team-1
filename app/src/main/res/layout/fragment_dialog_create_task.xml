@@ -21,8 +21,8 @@
 
     <RadioGroup
         android:id="@+id/contextRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_width="218dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/filterRadioGroup"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,36 +30,49 @@
         app:layout_constraintTop_toBottomOf="@+id/task_name_entry">
 
         <RadioButton
-            android:id="@+id/home"
-            android:layout_width="wrap_content"
+            android:id="@+id/errands"
+            android:layout_width="33dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:buttonTint="@color/yellow"
-            android:text="Home" />
-
-        <RadioButton
-            android:id="@+id/work"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:buttonTint="@color/blue"
-            android:text="Work" />
+            android:background="@drawable/yellow_background"
+            android:button="@null"
+            android:gravity="center"
+            android:text="H"
+            android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/school"
-            android:layout_width="wrap_content"
+
+            android:layout_width="29dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:buttonTint="@color/purple"
-            android:text="School" />
+            android:background="@drawable/purple_background"
+            android:button="@null"
+            android:gravity="center"
+            android:text="S"
+            android:textSize="20dp" />
 
         <RadioButton
-            android:id="@+id/errands"
-            android:layout_width="wrap_content"
+            android:id="@+id/work"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:buttonTint="@color/green"
-            android:text="Errands" />
+            android:background="@drawable/blue_background"
+            android:button="@null"
+            android:gravity="center"
+            android:text="W"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/home"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/green_background"
+            android:button="@null"
+            android:gravity="center"
+            android:text="E"
+            android:textSize="20dp" />
     </RadioGroup>
 
     <RadioGroup
