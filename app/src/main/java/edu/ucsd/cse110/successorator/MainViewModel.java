@@ -28,7 +28,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<SuccessoratorTask>> unfilteredTasks;
 
     private TaskFilterOption selectedFilter = TaskFilterOption.Today;
-    private TaskContext selectedContext;
+    private TaskContext selectedContext = TaskContext.Home;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -58,7 +58,6 @@ public class MainViewModel extends ViewModel {
                 this.unfilteredTasks.setValue(newTasks);
             }
         });
-        this.selectedContext = TaskContext.Home;
     }
 
     public Subject<List<SuccessoratorTask>> getOrderedTasks() {

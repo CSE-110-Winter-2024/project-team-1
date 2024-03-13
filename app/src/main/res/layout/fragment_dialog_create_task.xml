@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:buttonTint="@color/yellow"
             android:text="Home" />
 
         <RadioButton
@@ -41,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:buttonTint="@color/blue"
             android:text="Work" />
 
         <RadioButton
@@ -48,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:buttonTint="@color/purple"
             android:text="School" />
 
         <RadioButton
@@ -55,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:buttonTint="@color/green"
             android:text="Errands" />
     </RadioGroup>
 

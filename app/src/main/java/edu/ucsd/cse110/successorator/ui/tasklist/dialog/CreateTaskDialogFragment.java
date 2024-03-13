@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 // androidx imports
@@ -147,8 +148,8 @@ public class CreateTaskDialogFragment extends DialogFragment {
         }
 
         TaskContext context = TaskContext.Home;
-
         int selectedContext = view.contextRadioGroup.getCheckedRadioButtonId();
+
         if (selectedContext == R.id.home) {
             context = TaskContext.Home;
         }
