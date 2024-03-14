@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorContextFilterer;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTaskRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
@@ -28,7 +29,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<SuccessoratorTask>> unfilteredTasks;
 
     private TaskFilterOption selectedFilter = TaskFilterOption.Today;
-    private TaskContext selectedContext = TaskContext.Home;
+    private TaskContext selectedContext = TaskContext.None;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -161,14 +162,24 @@ public class MainViewModel extends ViewModel {
 
     public void changeContext(TaskContext context) {
         this.selectedContext = context;
-    }
+        var tasks = this.unfilteredTasks.getValue();
+        if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
+            return;
+        }
 
+        applyContextFilter(tasks);
+    }
     public TaskContext getSelectedContext() {
         return selectedContext;
     }
 
     private void applyFilter(List<SuccessoratorTask> tasks) {
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        this.orderedTasks.setValue(newTasks);
+    }
+    private void applyContextFilter(List<SuccessoratorTask> tasks) {
+        var newTasks = SuccessoratorContextFilterer.filterContext(selectedContext, tasks);
         this.orderedTasks.setValue(newTasks);
     }
 }

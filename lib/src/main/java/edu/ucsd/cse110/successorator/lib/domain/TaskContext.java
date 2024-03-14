@@ -4,5 +4,6 @@ public enum TaskContext {
     Home,
     Work,
     School,
-    Errands
+    Errands,
+    None
 }

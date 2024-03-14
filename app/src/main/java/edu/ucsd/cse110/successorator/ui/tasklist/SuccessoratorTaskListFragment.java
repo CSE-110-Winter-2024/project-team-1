@@ -37,6 +37,7 @@ import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.ui.tasklist.dialog.CreateTaskDialogFragment;
+import edu.ucsd.cse110.successorator.ui.tasklist.dialog.SwitchContextDialogFragment;
 import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class SuccessoratorTaskListFragment extends Fragment {
@@ -132,6 +133,10 @@ public class SuccessoratorTaskListFragment extends Fragment {
             var dialogFragment = CreateTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
+        view.filterContext.setOnClickListener(v -> {
+            var contextDialogFragment = SwitchContextDialogFragment.newInstance();
+            contextDialogFragment.show(getParentFragmentManager(), "SwitchContextDialogFragment");
+        });
 
         final List<Object> dropdownItems = new ArrayList<>(Arrays.asList(TaskFilterOption.values()));
         dropdownItems.set(0, TaskFilterOption.values()[0] + dateManager.getDate());
@@ -173,6 +178,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 // Do nothing if nothing is selected
             }
         });
+
         registerForContextMenu(view.taskList);
         return view.getRoot();
     }

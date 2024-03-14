@@ -38,7 +38,7 @@
             app:layout_constraintVertical_bias="0.505" />
 
         <RadioButton
-            android:id="@+id/Filter"
+            android:id="@+id/filterContext"
             android:layout_width="61dp"
             android:layout_height="26dp"
             android:layout_marginStart="10dp"
