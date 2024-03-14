@@ -167,7 +167,7 @@ public class SuccessoratorTaskTest {
     public void testRescheduleLeapYear() {
         long leapYearTest = 19782; // February 29th, 2024
         SuccessoratorTask task = new SuccessoratorTask(null, "Leap Year Task", 0, false, TaskType.Recurring, leapYearTest, TaskContext.Home);
-        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Leap Year Task", 0, leapYearTest, 0, TaskInterval.Monthly, TaskContext.Home, 0, 0);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Leap Year Task", 0, leapYearTest, 0, TaskInterval.Yearly, TaskContext.Home, 0, 0);
         SuccessoratorTask updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());

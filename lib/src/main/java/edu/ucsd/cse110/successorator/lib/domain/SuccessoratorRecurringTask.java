@@ -129,7 +129,6 @@ public class SuccessoratorRecurringTask {
                 // first, get the intended day (e.g. 3rd saturday of month)
                 // defer computation of original date for (probably marginal) performance gains
                 originalDate.setTimeInMillis(getCreateDate() * MILLISECONDS_IN_DAY);
-                newDate.add(Calendar.MONTH, scheduleCount);
                 int dayOfWeek = originalDate.get(Calendar.DAY_OF_WEEK);
                 int weekOfMonth = originalDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
 
