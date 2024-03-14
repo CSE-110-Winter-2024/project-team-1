@@ -57,10 +57,9 @@ public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask
             binding.taskName.setPaintFlags(binding.taskName.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
-        TaskContext context = TaskContext.Errands;
         ImageView contextImageView = binding.context;
         int drawableResourceId;
-        switch (context) {
+        switch (task.getContext()) {
             case Work:
                 drawableResourceId = R.drawable.work;
                 break;
@@ -74,6 +73,8 @@ public class SuccessoratorTaskListAdapter extends ArrayAdapter<SuccessoratorTask
                 drawableResourceId = R.drawable.home;
                 break;
         }
+        System.out.println(drawableResourceId);
+
         contextImageView.setImageResource(drawableResourceId);
 
 

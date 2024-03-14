@@ -85,6 +85,11 @@ public class CreateTaskDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var name = view.taskNameEntry.getText().toString();
 
+        if (name.trim().isEmpty()) {
+            Toast.makeText(getContext(), "Please enter a task name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // it doesn't really matter what we pass here, since the add method will extract
         // only the name from the task (consider changing? possible refactor could be helpful)
         long createDate = 0;
