@@ -158,6 +158,6 @@ public class SuccessoratorRecurringTask {
                 newDate.set(Calendar.MONTH, month);
                 break;
         }
-        return new SuccessoratorTask(null, name, 1, false, TaskType.Recurring, 0, newDate.getTimeInMillis()/MILLISECONDS_IN_DAY, TaskInterval.Daily, context);
+        return new SuccessoratorTask(null, name, 0, false, TaskType.Recurring, newDate.getTimeInMillis()/MILLISECONDS_IN_DAY, context);
     }
 }

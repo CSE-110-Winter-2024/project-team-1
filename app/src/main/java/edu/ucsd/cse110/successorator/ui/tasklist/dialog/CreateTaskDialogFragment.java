@@ -168,7 +168,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
             context = TaskContext.Work;
         }
 
-        var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval, context);
+        var task = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
 
         activityModel.add(task);
 

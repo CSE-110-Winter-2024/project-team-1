@@ -83,53 +83,9 @@ public class SuccessoratorTasks {
     // guarded function to keep map clean
     public static SuccessoratorTask rescheduleGuard(SuccessoratorTask task) {
         if (task.getType() == TaskType.Recurring && task.getDueDate() == LocalDate.now().toEpochDay()) {
-            return rescheduleTask(task);
+            //return rescheduleTask(task);
+            return null;
         }
         return task;
-    }
-
-    public static SuccessoratorTask rescheduleTask(SuccessoratorTask task) {
-        Calendar newDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        Calendar originalDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        newDate.setTimeInMillis(task.getDueDate() * MILLISECONDS_IN_DAY); // necessary because no setTimeInDays method exists
-        switch(task.getInterval()) {
-            case Daily:
-                newDate.add(Calendar.DATE, 1);
-                break;
-            case Weekly:
-                newDate.add(Calendar.WEEK_OF_YEAR, 1);
-                break;
-            case Monthly:
-                // first, get the intended day (e.g. 3rd saturday of month)
-                // defer computation of original date for (probably marginal) performance gains
-                originalDate.setTimeInMillis(task.getCreateDate() * MILLISECONDS_IN_DAY);
-                int dayOfWeek = originalDate.get(Calendar.DAY_OF_WEEK);
-                int weekOfMonth = originalDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-
-                // then, increment our date by a month
-                // we only increment if the actual week matches the expected week
-                // if it doesn't, then the previous month must have overflowed
-                // this means the month already incremented, so we avoid double incrementing
-                if (newDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) == weekOfMonth) {
-                    newDate.add(Calendar.MONTH, 1);
-                }
-
-                // next, set according day. calendar will overflow for us if necessary
-                newDate.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-                newDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, weekOfMonth);
-                break;
-            case Yearly:
-                originalDate.setTimeInMillis(task.getCreateDate() * MILLISECONDS_IN_DAY);
-
-                newDate.add(Calendar.YEAR, 1);
-
-                int dayOfMonth = originalDate.get(Calendar.DAY_OF_MONTH);
-                int month = originalDate.get(Calendar.MONTH);
-
-                newDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                newDate.set(Calendar.MONTH, month);
-                break;
-        }
-        return task.withDueDate(newDate.getTimeInMillis()/MILLISECONDS_IN_DAY).withIsComplete(false);
     }
 }
