@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 // androidx imports
@@ -21,9 +22,11 @@ import androidx.lifecycle.ViewModelProvider;
 import java.time.LocalDate;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateTaskBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.domain.TaskInterval;
 import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.util.DateManager;
@@ -81,6 +84,11 @@ public class CreateTaskDialogFragment extends DialogFragment {
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var name = view.taskNameEntry.getText().toString();
+
+        if (name.trim().isEmpty()) {
+            Toast.makeText(getContext(), "Please enter a task name", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // it doesn't really matter what we pass here, since the add method will extract
         // only the name from the task (consider changing? possible refactor could be helpful)
@@ -144,7 +152,23 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
         }
 
-        var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval);
+        TaskContext context = TaskContext.Home;
+        int selectedContext = view.contextRadioGroup.getCheckedRadioButtonId();
+
+        if (selectedContext == R.id.home) {
+            context = TaskContext.Home;
+        }
+        else if (selectedContext == R.id.school) {
+            context = TaskContext.School;
+        }
+        else if (selectedContext == R.id.errands) {
+            context = TaskContext.Errands;
+        }
+        else if (selectedContext == R.id.work) {
+            context = TaskContext.Work;
+        }
+
+        var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval, context);
 
         activityModel.add(task);
 

@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import edu.ucsd.cse110.successorator.data.db.SuccessoratorTaskEntity;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 
 public class SuccessoratorTaskDaoTest {
@@ -24,14 +25,14 @@ public class SuccessoratorTaskDaoTest {
 
     @Test
     public void testInsert() {
-        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0, 0, null);
+        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0, 0, null, null);
         int id = dao.insert(task);
         assertNotNull(id);
     }
 
     @Test
     public void testFind() {
-        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0, 0, null);
+        SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task Name", 1, false, TaskType.Normal.name(), 0, 0, null, null);
         int id = dao.insert(task);
         SuccessoratorTaskEntity retrievedTask = dao.find(id);
         assertNotNull(retrievedTask);
@@ -61,7 +62,7 @@ public class SuccessoratorTaskDaoTest {
     private List<SuccessoratorTaskEntity> createTestTasks(int count) {
         List<SuccessoratorTaskEntity> tasks = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task " + i, i, false, TaskType.Normal.name(), 0, 0, null);
+            SuccessoratorTaskEntity task = new SuccessoratorTaskEntity("Task " + i, i, false, TaskType.Normal.name(), 0, 0, null, null);
             tasks.add(task);
         }
         return tasks;
