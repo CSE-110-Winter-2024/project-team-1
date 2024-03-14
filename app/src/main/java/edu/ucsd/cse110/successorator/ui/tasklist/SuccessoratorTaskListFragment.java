@@ -4,11 +4,16 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +23,16 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
+import edu.ucsd.cse110.successorator.lib.domain.TaskContextMenuOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
@@ -163,7 +173,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 // Do nothing if nothing is selected
             }
         });
-
+        registerForContextMenu(view.taskList);
         return view.getRoot();
     }
 
@@ -184,5 +194,48 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 date.setValue(dateManager.getDate());
             }
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Pending || activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            menu.setHeaderTitle("Task Options");
+            if (activityModel.getSelectedFilter() == TaskFilterOption.Pending) {
+                menu.add(0, v.getId(), 0, TaskContextMenuOption.MoveToToday.getTitle());
+                menu.add(0, v.getId(), 0, TaskContextMenuOption.MoveToTomorrow.getTitle());
+                menu.add(0, v.getId(), 0, TaskContextMenuOption.Finish.getTitle());
+            }
+            menu.add(0, v.getId(), 0, TaskContextMenuOption.Delete.getTitle());
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        SuccessoratorTask task = adapter.getItem(position);
+
+        assert task != null;
+
+        if (item.getTitle() == TaskContextMenuOption.MoveToToday.getTitle()) {
+            // Implement move to today action
+            activityModel.rescheduleTaskToToday(task.getSortOrder());
+        } else if (item.getTitle() == TaskContextMenuOption.MoveToTomorrow.getTitle()) {
+            // Implement move to tomorrow action
+            activityModel.rescheduleTaskToTomorrow(task.getSortOrder());
+        } else if (item.getTitle() == TaskContextMenuOption.Finish.getTitle()) {
+            if (task.getType() == TaskType.Pending) {
+                activityModel.rescheduleTaskToToday(task.getSortOrder());
+            }
+            // Implement finish task action
+            activityModel.markComplete(task.getSortOrder());
+        } else if (item.getTitle() == TaskContextMenuOption.Delete.getTitle()) {
+            // Implement delete task action
+            activityModel.removeTask(task.getSortOrder());
+        } else {
+            return false;
+        }
+        return true;
     }
 }

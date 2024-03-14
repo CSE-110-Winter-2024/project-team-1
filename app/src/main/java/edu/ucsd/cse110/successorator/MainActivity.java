@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

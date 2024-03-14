@@ -46,6 +46,34 @@ public class SuccessoratorTasks {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    public static List<SuccessoratorTask> deleteTask(List<SuccessoratorTask> tasks, int sortOrder) {
+        tasks.remove(sortOrder);
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+        return tasks;
+    }
+
+    public static List<SuccessoratorTask> rescheduleTaskToToday(List<SuccessoratorTask> tasks, int sortOrder) {
+        var task = tasks.get(sortOrder);
+        var modifiedTask = task.withDueDate(LocalDate.now().toEpochDay());
+        if (task.getType() == TaskType.Pending) {
+            modifiedTask = modifiedTask.withType(TaskType.Normal);
+        }
+        tasks.set(sortOrder, modifiedTask);
+        return tasks;
+    }
+
+    public static List<SuccessoratorTask> rescheduleTaskToTomorrow(List<SuccessoratorTask> tasks, int sortOrder) {
+        var task = tasks.get(sortOrder);
+        var modifiedTask = task.withDueDate(LocalDate.now().plusDays(1).toEpochDay());
+        if (task.getType() == TaskType.Pending) {
+            modifiedTask = modifiedTask.withType(TaskType.Normal);
+        }
+        tasks.set(sortOrder, modifiedTask);
+        return tasks;
+    }
+
     public static List<SuccessoratorTask> rescheduleTasks(List<SuccessoratorTask> tasks) {
         return tasks.stream()
                 .map(task -> rescheduleGuard(task))
