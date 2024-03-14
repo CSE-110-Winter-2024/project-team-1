@@ -165,6 +165,7 @@ public class MainViewModel extends ViewModel {
 
     public TaskContext getSelectedContext() {
         return selectedContext;
+    }
 
     private void applyFilter(List<SuccessoratorTask> tasks) {
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
