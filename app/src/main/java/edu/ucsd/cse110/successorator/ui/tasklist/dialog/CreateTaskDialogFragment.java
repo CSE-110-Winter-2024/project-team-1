@@ -94,16 +94,17 @@ public class CreateTaskDialogFragment extends DialogFragment {
         });
 
         if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            view.oneTime.setVisibility(View.GONE);
             view.editTextDate.setOnClickListener(v -> {
                 var datePicker = DatePickerFragment.newInstance(view);
                 datePicker.show(getParentFragmentManager(), "DatePickerFragment");
             });
         } else {
-            view.editTextDate.setVisibility(View.INVISIBLE);
-            view.startDateLabel.setVisibility(View.INVISIBLE);
+            view.editTextDate.setVisibility(View.GONE);
+            view.startDateLabel.setVisibility(View.GONE);
         }
         if (activityModel.getSelectedFilter() == TaskFilterOption.Pending) {
-            view.filterRadioGroup.setVisibility(View.INVISIBLE);
+            view.filterRadioGroup.setVisibility(View.GONE);
         }
 
         return dialog;
