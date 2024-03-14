@@ -11,25 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
-import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContextMenuOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskType;
@@ -102,11 +98,10 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         date.observe(date -> {
             if (date != null) {
-                android.util.Log.d("date", "date modified " + date);
-                activityModel.removeFinishedTasks();
-                activityModel.rescheduleTasks();
+                activityModel.removeFinishedTasks(dateManager.getEpochDays());
             }
         });
+
 
         sharedPreferences = getActivity().getSharedPreferences("successorator", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
@@ -174,6 +169,45 @@ public class SuccessoratorTaskListFragment extends Fragment {
             }
         });
         registerForContextMenu(view.taskList);
+
+        view.hamburgerMenuIcon.setOnClickListener(v -> {
+            view.drawerLayout.openDrawer(GravityCompat.START);
+        });
+
+        view.navigation.setNavigationItemSelectedListener(item -> {
+            switch (item.getTitle().toString()) {
+                case "Home":
+                    view.hamburgerMenuIcon.setBackgroundColor(getActivity().getColor(R.color.yellow));
+                    break;
+                case "School":
+                    view.hamburgerMenuIcon.setBackgroundColor(getActivity().getColor(R.color.purple));
+                    break;
+                case "Work":
+                    view.hamburgerMenuIcon.setBackgroundColor(getActivity().getColor(R.color.blue));
+                    break;
+                case "Errands":
+                    view.hamburgerMenuIcon.setBackgroundColor(getActivity().getColor(R.color.green));
+                    break;
+                case "Cancel":
+                    view.hamburgerMenuIcon.setBackgroundColor(getActivity().getColor(R.color.white));
+                    if (view.navigation.getCheckedItem() != null) {
+                        view.navigation.getCheckedItem().setChecked(false);
+                    }
+                    break;
+            }
+            activityModel.focus(item.getTitle().toString());
+            view.drawerLayout.closeDrawers();
+            return true;
+        });
+
+        view.testDayChangeButton.setOnClickListener(v -> {
+            // stop comparing date to sharedPreferences
+            activityModel.getOrderedTasks().removeObserver(dateObserver);
+
+            var newDate = dateManager.incrementDate();
+            date.setValue(newDate);
+        });
+
         return view.getRoot();
     }
 

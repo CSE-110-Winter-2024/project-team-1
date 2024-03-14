@@ -1,15 +1,12 @@
 package edu.ucsd.cse110.successorator.ui.tasklist.dialog;
 
 // android imports
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 // androidx imports
@@ -54,6 +51,8 @@ public class CreateTaskDialogFragment extends DialogFragment {
 
         if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
             view.filterRadioGroup.setVisibility(View.VISIBLE);
+            // default option is weekly
+            view.weekly.toggle();
         }
 
         var dialog = new AlertDialog.Builder(getActivity())
@@ -86,7 +85,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
         var name = view.taskNameEntry.getText().toString();
 
         if (name.trim().isEmpty()) {
-            Toast.makeText(getContext(), "Please enter a task name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter a task name", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -109,12 +108,8 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
             case Recurring:
                 // simple validation
-                if (view.filterRadioGroup.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(getContext(), "Please select an option", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (view.editTextDate.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getContext(), "Please select a start date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please select a start date", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -152,7 +147,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
         }
 
-        TaskContext context = TaskContext.Home;
+        TaskContext context;
         int selectedContext = view.contextRadioGroup.getCheckedRadioButtonId();
 
         if (selectedContext == R.id.home) {
@@ -166,6 +161,10 @@ public class CreateTaskDialogFragment extends DialogFragment {
         }
         else if (selectedContext == R.id.work) {
             context = TaskContext.Work;
+        }
+        else {
+            Toast.makeText(getContext(), "Please select a context", Toast.LENGTH_LONG).show();
+            return;
         }
 
         var task = new SuccessoratorTask(null, name, -1, false, taskType, createDate, dueDate, taskInterval, context);
