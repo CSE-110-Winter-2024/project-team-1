@@ -84,6 +84,8 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.deleteTask(tasks, sortOrder);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
@@ -94,6 +96,8 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.rescheduleTaskToToday(tasks, sortOrder);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void rescheduleTaskToTomorrow(int sortOrder) {
@@ -104,12 +108,16 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.rescheduleTaskToTomorrow(tasks, sortOrder);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void markComplete(int sortOrder) {
         var tasks = this.unfilteredTasks.getValue();
         var newTasks = SuccessoratorTasks.toggleComplete(tasks, sortOrder);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void removeFinishedTasks() {
@@ -120,6 +128,8 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void rescheduleTasks() {
@@ -130,6 +140,8 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.rescheduleTasks(tasks);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
     }
 
     public void changeFilter(TaskFilterOption filter) {
@@ -139,6 +151,8 @@ public class MainViewModel extends ViewModel {
             android.util.Log.d("tasks", "is null");
             return;
         }
+        
+        applyFilter(tasks);
     }
 
     public TaskFilterOption getSelectedFilter() {
@@ -151,5 +165,9 @@ public class MainViewModel extends ViewModel {
 
     public TaskContext getSelectedContext() {
         return selectedContext;
+
+    private void applyFilter(List<SuccessoratorTask> tasks) {
+        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        this.orderedTasks.setValue(newTasks);
     }
 }
