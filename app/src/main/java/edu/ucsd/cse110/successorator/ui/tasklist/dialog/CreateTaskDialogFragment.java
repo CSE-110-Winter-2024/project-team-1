@@ -71,7 +71,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
         if (activityModel.getSelectedFilter() == TaskFilterOption.Tomorrow) {
             view.weekly.setText("weekly on " + dateManager.getTomorrowFormattedDate("E"));
 
-            int weekOfMonth = (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1) / 7 + 1;
+            int weekOfMonth = (Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) / 7 + 1;
             String ord = (weekOfMonth == 1) ? "st" : (weekOfMonth == 2) ? "nd" : (weekOfMonth == 3) ? "rd" : "th";
             view.monthly.setText("monthly on " + weekOfMonth + ord + dateManager.getTomorrowFormattedDate(" E"));
             view.yearly.setText("yearly on " + dateManager.getTomorrowFormattedDate("M/d"));
