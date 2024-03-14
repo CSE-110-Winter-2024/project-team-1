@@ -253,9 +253,9 @@ public class SuccessoratorTasksTest {
 
     private List<SuccessoratorTask> createTasks() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, 0, TaskInterval.Daily));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
         return tasks;
     }
 }
