@@ -84,12 +84,6 @@
         app:layout_constraintTop_toBottomOf="@+id/contextRadioGroup">
 
         <RadioButton
-            android:id="@+id/oneTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="one-time" />
-
-        <RadioButton
             android:id="@+id/daily"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

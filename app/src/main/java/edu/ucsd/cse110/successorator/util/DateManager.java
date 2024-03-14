@@ -29,13 +29,6 @@ public class DateManager {
         return getFormattedDate(LONG_DATE_FORMAT);
     }
 
-    public String getTomorrowLongDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat(LONG_DATE_FORMAT, Locale.getDefault());
-        var tomorrowCalendar = (Calendar) calendar.clone();
-        tomorrowCalendar.add(Calendar.DATE, 1);
-        return sdf.format(tomorrowCalendar.getTime());
-    }
-
     public String getFormattedDate(String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         return sdf.format(calendar.getTime());
@@ -54,13 +47,6 @@ public class DateManager {
 
     public String getTomorrow() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
-        var tomorrowCalendar = (Calendar) calendar.clone();
-        tomorrowCalendar.add(Calendar.DATE, 1);
-        return sdf.format(tomorrowCalendar.getTime());
-    }
-
-    public String getTomorrowFormattedDate(String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         var tomorrowCalendar = (Calendar) calendar.clone();
         tomorrowCalendar.add(Calendar.DATE, 1);
         return sdf.format(tomorrowCalendar.getTime());
