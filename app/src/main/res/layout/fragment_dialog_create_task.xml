@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/task_name_entry">
 
         <RadioButton
-            android:id="@+id/errands"
+            android:id="@+id/home"
             android:layout_width="33dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -64,7 +64,7 @@
             android:textSize="20dp" />
 
         <RadioButton
-            android:id="@+id/home"
+            android:id="@+id/errands"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
