@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.SuperscriptSpan;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 // internal imports
 import java.time.LocalDate;
+import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
@@ -63,8 +67,23 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
 
-        view.editTextDate.setHint(dateManager.getLongDate());
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Tomorrow) {
+            view.weekly.setText("weekly on " + dateManager.getTomorrowFormattedDate("E"));
 
+            int weekOfMonth = (Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) / 7 + 1;
+            String ord = (weekOfMonth == 1) ? "st" : (weekOfMonth == 2) ? "nd" : (weekOfMonth == 3) ? "rd" : "th";
+            view.monthly.setText("monthly on " + weekOfMonth + ord + dateManager.getTomorrowFormattedDate(" E"));
+            view.yearly.setText("yearly on " + dateManager.getTomorrowFormattedDate("M/d"));
+            view.editTextDate.setHint(dateManager.getTomorrowLongDate());
+        } else {
+            view.weekly.setText("weekly on " + dateManager.getFormattedDate("E"));
+
+            int weekOfMonth = (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1) / 7 + 1;
+            String ord = (weekOfMonth == 1) ? "st" : (weekOfMonth == 2) ? "nd" : (weekOfMonth == 3) ? "rd" : "th";
+            view.monthly.setText("monthly on " + weekOfMonth + ord + dateManager.getFormattedDate(" E"));
+            view.yearly.setText("yearly on " + dateManager.getFormattedDate("M/d"));
+            view.editTextDate.setHint(dateManager.getLongDate());
+        }
         view.taskNameEntry.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
@@ -73,10 +92,19 @@ public class CreateTaskDialogFragment extends DialogFragment {
             return false;
         });
 
-        view.editTextDate.setOnClickListener(v -> {
-            var datePicker = DatePickerFragment.newInstance(view);
-            datePicker.show(getParentFragmentManager(), "DatePickerFragment");
-        });
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            view.oneTime.setVisibility(View.GONE);
+            view.editTextDate.setOnClickListener(v -> {
+                var datePicker = DatePickerFragment.newInstance(view);
+                datePicker.show(getParentFragmentManager(), "DatePickerFragment");
+            });
+        } else {
+            view.editTextDate.setVisibility(View.GONE);
+            view.startDateLabel.setVisibility(View.GONE);
+        }
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Pending) {
+            view.filterRadioGroup.setVisibility(View.GONE);
+        }
 
         return dialog;
     }
@@ -112,25 +140,6 @@ public class CreateTaskDialogFragment extends DialogFragment {
                     Toast.makeText(getContext(), "Please select a start date", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                name += ", ";
-                dueDate = dateManager.getDateFromFormattedString(view.editTextDate.getText().toString()) / (24*60*60*1000);
-                createDate = dueDate;
-                if (view.daily.isChecked()) {
-                    name += view.daily.getText();
-                }
-                else if (view.weekly.isChecked()) {
-                    name += view.weekly.getText();
-                    taskInterval = TaskInterval.Weekly;
-                }
-                else if (view.monthly.isChecked()) {
-                    name += view.monthly.getText();
-                    taskInterval = TaskInterval.Monthly;
-                }
-                else if (view.yearly.isChecked()) {
-                    name += view.yearly.getText();
-                    taskInterval = TaskInterval.Yearly;
-                }
             default:
                 break;
         }
@@ -147,7 +156,44 @@ public class CreateTaskDialogFragment extends DialogFragment {
                 break;
         }
 
-        TaskContext context;
+        if (activityModel.getSelectedFilter() != TaskFilterOption.Pending) {
+            if (!view.oneTime.isChecked() && view.filterRadioGroup.getCheckedRadioButtonId() != -1) {
+                taskType = TaskType.Recurring;
+                name += ", ";
+
+                if (view.daily.isChecked()) {
+                    name += view.daily.getText();
+                } else if (view.weekly.isChecked()) {
+                    name += view.weekly.getText();
+                    taskInterval = TaskInterval.Weekly;
+                } else if (view.monthly.isChecked()) {
+                    name += view.monthly.getText();
+                    taskInterval = TaskInterval.Monthly;
+                } else if (view.yearly.isChecked()) {
+                    name += view.yearly.getText();
+                    taskInterval = TaskInterval.Yearly;
+                }
+            } else {
+                taskType = TaskType.Normal;
+            }
+
+            switch (activityModel.getSelectedFilter()) {
+                case Tomorrow:
+                    dueDate = dateManager.getDateFromFormattedString(dateManager.getTomorrowLongDate()) / (24 * 60 * 60 * 1000);
+                    break;
+                case Today:
+                    dueDate = dateManager.getDateFromFormattedString(dateManager.getLongDate()) / (24 * 60 * 60 * 1000);
+                    break;
+                case Recurring:
+                    dueDate = dateManager.getDateFromFormattedString(view.editTextDate.getText().toString()) / (24 * 60 * 60 * 1000);
+                    break;
+            }
+
+            createDate = dueDate;
+        }
+
+        TaskContext context = TaskContext.Home;
+
         int selectedContext = view.contextRadioGroup.getCheckedRadioButtonId();
 
         if (selectedContext == R.id.home) {
