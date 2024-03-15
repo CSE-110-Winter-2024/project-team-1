@@ -75,9 +75,8 @@ public class MainViewModel extends ViewModel {
                         .sorted(Comparator.comparingInt(SuccessoratorRecurringTask::getSortOrder))
                         .collect(Collectors.toList());
 
-                //var filteredTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newRecurringTasks);
-                //this.orderedRecurringTasks.setValue(filteredTasks);
                 this.unfilteredRecurringTasks.setValue(newRecurringTasks);
+                applyRecurringFilters(newRecurringTasks);
             }
         });
     }
@@ -87,7 +86,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public Subject<List<SuccessoratorRecurringTask>> getOrderedRecurringTasks() {
-        return unfilteredRecurringTasks; // we dont have ordered tasks yet
+        return orderedRecurringTasks;
     }
 
     public void add(SuccessoratorTask task) {
@@ -144,8 +143,6 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.deleteRecurringTask(tasks, sortOrder);
         recurringTaskRepository.save(newTasks);
-
-        applyRecurringFilters(newTasks);
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
@@ -211,6 +208,9 @@ public class MainViewModel extends ViewModel {
 
     private void applyFilters(List<SuccessoratorTask> tasks) {
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        if (selectedContext != null) {
+            newTasks = SuccessoratorTasksFilterer.filterTasksByContext(selectedContext, newTasks);
+        }
         if (selectedFilter == TaskFilterOption.Recurring) {
             this.recurringActive = true;
         } else {
@@ -223,6 +223,9 @@ public class MainViewModel extends ViewModel {
         var newTasks = tasks;
         if (selectedFilter != TaskFilterOption.Recurring) {
             this.recurringActive = false;
+        }
+        else {
+            this.recurringActive = true;
         }
         if (selectedContext != null) {
             newTasks = SuccessoratorTasksFilterer.filterRecurringTasksByContext(selectedContext, newTasks);
@@ -245,5 +248,12 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
         this.orderedTasks.setValue(newTasks);
+
+        //also filter recurring tasks
+        var recurringTasks = this.unfilteredRecurringTasks.getValue();
+        if (recurringTasks == null) {
+            return;
+        }
+        applyRecurringFilters(recurringTasks);
     }
 }

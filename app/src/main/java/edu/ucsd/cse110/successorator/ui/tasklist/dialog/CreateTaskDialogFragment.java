@@ -60,6 +60,12 @@ public class CreateTaskDialogFragment extends DialogFragment {
             view.weekly.toggle();
         }
 
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Today || activityModel.getSelectedFilter() == TaskFilterOption.Tomorrow) {
+            view.filterRadioGroup.setVisibility(View.VISIBLE);
+            // default option is weekly
+            view.oneTime.toggle();
+        }
+
         var dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Task")
                 .setMessage("Please enter the new task's title.")
