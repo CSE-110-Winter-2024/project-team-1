@@ -100,7 +100,7 @@ public class SuccessoratorMainViewModelTest {
         model.focus("Work");
         model.changeFilter(TaskFilterOption.Pending);
         // Then only the tasks with that context show up on task view
-        assertEquals(context, taskRepository.findAll().getValue().get(0).getContext());
+        assertEquals(context, model.getOrderedTasks().getValue().get(0).getContext());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class SuccessoratorMainViewModelTest {
         model.markComplete(0);
         assertEquals(true, taskRepository.findAll().getValue().get(0).getIsComplete());
         model.removeTask(0);
-        assertEquals(null, taskRepository.findAll().getValue().get(0));
+        assertEquals(0, taskRepository.findAll().getValue().size());
     }
 
     @Test
@@ -180,6 +180,7 @@ public class SuccessoratorMainViewModelTest {
 
         @Override
         public void save(List<SuccessoratorTask> tasks) {
+            this.tasks.clear();
             for (SuccessoratorTask task : tasks) {
                 this.tasks.put(task.getId(), task);
             }
@@ -229,6 +230,7 @@ public class SuccessoratorMainViewModelTest {
 
         @Override
         public void save(List<SuccessoratorRecurringTask> tasks) {
+            this.tasks.clear();
             for (SuccessoratorRecurringTask task : tasks) {
                 this.tasks.put(task.getId(), task);
             }
