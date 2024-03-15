@@ -136,6 +136,15 @@ public class SuccessoratorTaskListFragment extends Fragment {
             }
         });
 
+        activityModel.getOrderedRecurringTasks().observe(tasks -> {
+            if (activityModel.recurringActive) {
+                this.view.taskList.setAdapter(recurringAdapter);
+                recurringAdapter.clear();
+                recurringAdapter.addAll(new ArrayList<>(activityModel.getOrderedRecurringTasks().getValue()));
+                recurringAdapter.notifyDataSetChanged();
+            }
+        });
+
         this.view.taskList.setEmptyView(this.view.emptyText);
         // link button with creation fragment
         view.addTaskButton.setOnClickListener(v -> {

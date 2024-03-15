@@ -75,8 +75,6 @@ public class MainViewModel extends ViewModel {
                         .sorted(Comparator.comparingInt(SuccessoratorRecurringTask::getSortOrder))
                         .collect(Collectors.toList());
 
-                //var filteredTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newRecurringTasks);
-                //this.orderedRecurringTasks.setValue(filteredTasks);
                 this.unfilteredRecurringTasks.setValue(newRecurringTasks);
                 applyRecurringFilters(newRecurringTasks);
             }
@@ -142,8 +140,6 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.deleteRecurringTask(tasks, sortOrder);
         recurringTaskRepository.save(newTasks);
-
-        applyRecurringFilters(newTasks);
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
@@ -224,6 +220,9 @@ public class MainViewModel extends ViewModel {
         var newTasks = tasks;
         if (selectedFilter != TaskFilterOption.Recurring) {
             this.recurringActive = false;
+        }
+        else {
+            this.recurringActive = true;
         }
         if (selectedContext != null) {
             newTasks = SuccessoratorTasksFilterer.filterRecurringTasksByContext(selectedContext, newTasks);
