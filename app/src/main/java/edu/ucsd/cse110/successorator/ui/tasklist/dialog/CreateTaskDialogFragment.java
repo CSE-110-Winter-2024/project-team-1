@@ -213,9 +213,14 @@ public class CreateTaskDialogFragment extends DialogFragment {
             return;
         }
 
-        var task = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
 
-        activityModel.add(task);
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            var recurringTask = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
+            activityModel.add(recurringTask);
+        } else {
+            var task = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
+            activityModel.add(task);
+        }
 
         dialog.dismiss();
     }

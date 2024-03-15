@@ -26,6 +26,7 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContextMenuOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
@@ -99,7 +100,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
             if (activityModel.recurringActive) {
                 this.view.taskList.setAdapter(recurringAdapter);
                 recurringAdapter.clear();
-                recurringAdapter.addAll(new ArrayList<>((Collection) activityModel.getOrderedRecurringTasks()));
+                recurringAdapter.addAll(activityModel.getOrderedRecurringTasks().getValue());
                 recurringAdapter.notifyDataSetChanged();
             }
             if (tasks != null) {

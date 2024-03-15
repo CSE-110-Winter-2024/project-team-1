@@ -198,9 +198,10 @@ public class MainViewModel extends ViewModel {
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
         if (selectedFilter == TaskFilterOption.Recurring) {
             this.recurringActive = true;
-            //var recurringTasks = SuccessoratorTasksFilterer.filterRecurringTasksByContext(selectedContext, )
+            applyRecurringFilters(this.unfilteredRecurringTasks.getValue());
         }
         if (selectedContext != null) {
+            this.recurringActive = false;
             newTasks = SuccessoratorTasksFilterer.filterTasksByContext(selectedContext, newTasks);
         }
         this.orderedTasks.setValue(newTasks);
