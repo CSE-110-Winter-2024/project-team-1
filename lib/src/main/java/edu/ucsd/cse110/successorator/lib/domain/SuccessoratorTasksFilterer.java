@@ -4,16 +4,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class SuccessoratorTasksFilterer {
-    public static List<SuccessoratorTask> filterTasks(TaskFilterOption filter, List<SuccessoratorTask> tasks) {
+    public static List<SuccessoratorTask> filterTasks(TaskFilterOption filter, List<SuccessoratorTask> tasks, long epochDay) {
         switch (filter) {
             case Today:
                 // find all tasks that are due today and return them
                 return tasks.stream()
-                        .filter(task -> task.getDueDate() == (LocalDate.now().toEpochDay()))
+                        .filter(task -> task.getDueDate() == epochDay)
                         .collect(java.util.stream.Collectors.toList());
             case Tomorrow:
                 return tasks.stream()
-                        .filter(task -> task.getDueDate() == (LocalDate.now().plusDays(1).toEpochDay()))
+                        .filter(task -> task.getDueDate() == epochDay + 1)
                         .collect(java.util.stream.Collectors.toList());
             case Recurring:
                 return tasks.stream()
@@ -32,5 +32,11 @@ public class SuccessoratorTasksFilterer {
         return tasks.stream()
             .filter(task -> task.getContext() == context)
             .collect(java.util.stream.Collectors.toList());
+    }
+
+    public static List<SuccessoratorRecurringTask> filterRecurringTasksByContext(TaskContext context, List<SuccessoratorRecurringTask> tasks) {
+        return tasks.stream()
+                .filter(task -> task.getContext() == context)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

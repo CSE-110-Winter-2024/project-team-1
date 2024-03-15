@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTask;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTaskRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTaskRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTasks;
@@ -18,33 +20,44 @@ import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class MainViewModel extends ViewModel {
 
     private final SuccessoratorTaskRepository taskRepository;
+    private final SuccessoratorRecurringTaskRepository recurringTaskRepository;
 
     private final MutableSubject<List<SuccessoratorTask>> orderedTasks;
-
     private final MutableSubject<List<SuccessoratorTask>> unfilteredTasks;
+
+    private final MutableSubject<List<SuccessoratorRecurringTask>> orderedRecurringTasks;
+    private final MutableSubject<List<SuccessoratorRecurringTask>> unfilteredRecurringTasks;
 
     private TaskFilterOption selectedFilter = TaskFilterOption.Today;
     private TaskContext selectedContext;
 
+    private DateManager dateManager = new DateManager();
+
+    public boolean recurringActive = false;
+    
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
                     creationExtras -> {
                         var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getTaskRepository());
+                        return new MainViewModel(app.getTaskRepository(), app.getRecurringTaskRepository());
                     });
 
-    public MainViewModel(SuccessoratorTaskRepository taskRepository) {
+    public MainViewModel(SuccessoratorTaskRepository taskRepository, SuccessoratorRecurringTaskRepository recurringTaskRepository) {
         this.taskRepository = taskRepository;
+        this.recurringTaskRepository = recurringTaskRepository;
 
         this.orderedTasks = new SimpleSubject<>();
-
         this.unfilteredTasks = new SimpleSubject<>();
+
+        this.orderedRecurringTasks = new SimpleSubject<>();
+        this.unfilteredRecurringTasks = new SimpleSubject<>();
 
         taskRepository.findAll().observe(tasks -> {
             if (tasks != null) {
@@ -57,10 +70,26 @@ public class MainViewModel extends ViewModel {
                 applyFilters(newTasks);
             }
         });
+
+
+        recurringTaskRepository.findAll().observe(recurringTasks -> {
+            if (recurringTasks != null) {
+                var newRecurringTasks = recurringTasks.stream()
+                        .sorted(Comparator.comparingInt(SuccessoratorRecurringTask::getSortOrder))
+                        .collect(Collectors.toList());
+
+                this.unfilteredRecurringTasks.setValue(newRecurringTasks);
+                applyRecurringFilters(newRecurringTasks);
+            }
+        });
     }
 
     public Subject<List<SuccessoratorTask>> getOrderedTasks() {
         return orderedTasks;
+    }
+
+    public Subject<List<SuccessoratorRecurringTask>> getOrderedRecurringTasks() {
+        return orderedRecurringTasks;
     }
 
     public void add(SuccessoratorTask task) {
@@ -75,6 +104,30 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
     }
 
+    public void add(SuccessoratorRecurringTask task) {
+        System.out.println("Add method called!");
+        var tasks = this.unfilteredRecurringTasks.getValue();
+        if (tasks == null) {
+            recurringTaskRepository.add(task);
+            return;
+        }
+
+        System.out.println("Recurring creaated!");
+
+        var normalTasks = this.unfilteredTasks.getValue();
+        if (normalTasks == null) {
+            return;
+        }
+        System.out.println("Calling schedule method!");
+        var newNormalTasks = SuccessoratorTasks.scheduleTasks(normalTasks, task);
+        System.out.println(task.getCurrentTask());
+        System.out.println(task.getUpcomingTask());
+        taskRepository.save(newNormalTasks);
+
+        var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
+        recurringTaskRepository.save(newTasks);
+    }
+
     public void removeTask(int sortOrder) {
         var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
@@ -83,6 +136,16 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.deleteTask(tasks, sortOrder);
         taskRepository.save(newTasks);
+    }
+
+    public void removeRecurringTask(int sortOrder) {
+        var tasks = this.unfilteredRecurringTasks.getValue();
+        if (tasks == null) {
+            android.util.Log.d("tasks", "is null");
+            return;
+        }
+        var newTasks = SuccessoratorTasks.deleteRecurringTask(tasks, sortOrder);
+        recurringTaskRepository.save(newTasks);
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
@@ -131,6 +194,48 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
     }
 
+    public boolean checkReschedule(long currentId, long upcomingId, List<SuccessoratorTask> tasks) {
+        long currentDue = -1;
+        long upcomingDue = -1;
+        int currentIdx = -1;
+        int upcomingIdx = -1;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId() == currentId) {
+                currentDue = tasks.get(i).getDueDate();
+                currentIdx = i;
+            }
+            if (tasks.get(i).getId() == upcomingId) {
+                upcomingDue = tasks.get(i).getDueDate();
+                upcomingIdx = i;
+            }
+        }
+        if (currentIdx == -1) { // current task doesn't exist (was completed?)
+            return true;
+        }
+        if (currentDue == upcomingDue) { // rollover caused collision
+            // delete old task
+            tasks.remove(currentIdx);
+            return true;
+        }
+        return false;
+    }
+
+    public void rescheduleRecurring(long date) {
+        var recurringTasks = this.unfilteredRecurringTasks.getValue();
+        var tasks = this.unfilteredTasks.getValue();
+        if (recurringTasks == null) {
+            android.util.Log.d("tasks", "is null");
+            return;
+        }
+        for (SuccessoratorRecurringTask task : recurringTasks) {
+            boolean rescheduleCode = checkReschedule(task.getCurrentTask(), task.getUpcomingTask(), tasks);
+            if (rescheduleCode) {
+                tasks = SuccessoratorTasks.scheduleTasks(tasks, task);
+            }
+        }
+        taskRepository.save(tasks);
+    }
+
     public void changeFilter(TaskFilterOption filter) {
         this.selectedFilter = filter;
         var tasks = this.unfilteredTasks.getValue();
@@ -147,11 +252,30 @@ public class MainViewModel extends ViewModel {
     }
 
     private void applyFilters(List<SuccessoratorTask> tasks) {
-        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks, dateManager.getEpochDays());
         if (selectedContext != null) {
             newTasks = SuccessoratorTasksFilterer.filterTasksByContext(selectedContext, newTasks);
         }
+        if (selectedFilter == TaskFilterOption.Recurring) {
+            this.recurringActive = true;
+        } else {
+            this.recurringActive = false;
+        }
         this.orderedTasks.setValue(newTasks);
+    }
+
+    private void applyRecurringFilters(List<SuccessoratorRecurringTask> tasks) {
+        var newTasks = tasks;
+        if (selectedFilter != TaskFilterOption.Recurring) {
+            this.recurringActive = false;
+        }
+        else {
+            this.recurringActive = true;
+        }
+        if (selectedContext != null) {
+            newTasks = SuccessoratorTasksFilterer.filterRecurringTasksByContext(selectedContext, newTasks);
+        }
+        this.orderedRecurringTasks.setValue(newTasks);
     }
 
     public void focus(String focusContext) {
@@ -167,7 +291,18 @@ public class MainViewModel extends ViewModel {
         else {
             selectedContext = null;
         }
-        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks, dateManager.getEpochDays());
         this.orderedTasks.setValue(newTasks);
+
+        //also filter recurring tasks
+        var recurringTasks = this.unfilteredRecurringTasks.getValue();
+        if (recurringTasks == null) {
+            return;
+        }
+        applyRecurringFilters(recurringTasks);
+    }
+
+    public void setDateManager(DateManager dateManager) {
+        this.dateManager = dateManager;
     }
 }

@@ -13,11 +13,11 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterToday() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, LocalDate.now().toEpochDay(), LocalDate.now().toEpochDay(), TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, LocalDate.now().toEpochDay(), TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -25,11 +25,11 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterTomorrow() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, LocalDate.now().plusDays(1).toEpochDay(), LocalDate.now().plusDays(1).toEpochDay(), TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, LocalDate.now().toEpochDay(), LocalDate.now().toEpochDay(), TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, LocalDate.now().plusDays(1).toEpochDay(), TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, LocalDate.now().toEpochDay(), TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Tomorrow, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Tomorrow, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -37,11 +37,11 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterRecurring() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Recurring, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Recurring, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -49,11 +49,11 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterPending() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -62,7 +62,7 @@ public class SuccessoratorTasksFiltererTest {
     public void testFilterEmpty() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(0, filteredTasks.size());
     }
@@ -70,11 +70,11 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterByPendingWithNoPendingTasks() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(0, filteredTasks.size());
     }
@@ -82,11 +82,11 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterByRecurringWithNoRecurringTasks() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(0, filteredTasks.size());
     }
@@ -94,9 +94,9 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterTasksByContext() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.School));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Errands));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.School));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Errands));
 
         List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasksByContext(TaskContext.Home, tasks);
 

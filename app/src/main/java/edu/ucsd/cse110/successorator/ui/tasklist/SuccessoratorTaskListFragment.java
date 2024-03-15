@@ -20,11 +20,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContextMenuOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
@@ -40,6 +42,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
 
+    private SuccessoratorRecurringTaskListAdapter recurringAdapter;
 
     private DateManager dateManager = new DateManager();
 
@@ -88,20 +91,17 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 }
         );
 
-        activityModel.getOrderedTasks().observe(tasks -> {
-            if (tasks != null) {
-                adapter.clear();
-                adapter.addAll(new ArrayList<>(tasks));
-                adapter.notifyDataSetChanged();
-            }
-        });
+        this.recurringAdapter = new SuccessoratorRecurringTaskListAdapter(
+                requireContext(),
+                List.of()
+        );
 
         date.observe(date -> {
             if (date != null) {
+                activityModel.rescheduleRecurring(dateManager.getEpochDays());
                 activityModel.removeFinishedTasks(dateManager.getEpochDays());
             }
         });
-
 
         sharedPreferences = getActivity().getSharedPreferences("successorator", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
@@ -121,10 +121,34 @@ public class SuccessoratorTaskListFragment extends Fragment {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
 
         this.view.taskList.setAdapter(adapter);
+
+        activityModel.getOrderedTasks().observe(tasks -> {
+            if (activityModel.recurringActive) {
+                this.view.taskList.setAdapter(recurringAdapter);
+                recurringAdapter.clear();
+                recurringAdapter.addAll(new ArrayList<>(activityModel.getOrderedRecurringTasks().getValue()));
+                recurringAdapter.notifyDataSetChanged();
+            } else if (tasks != null){
+                this.view.taskList.setAdapter(adapter);
+                adapter.clear();
+                adapter.addAll(new ArrayList<>(tasks));
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        activityModel.getOrderedRecurringTasks().observe(tasks -> {
+            if (activityModel.recurringActive) {
+                this.view.taskList.setAdapter(recurringAdapter);
+                recurringAdapter.clear();
+                recurringAdapter.addAll(new ArrayList<>(activityModel.getOrderedRecurringTasks().getValue()));
+                recurringAdapter.notifyDataSetChanged();
+            }
+        });
+
         this.view.taskList.setEmptyView(this.view.emptyText);
         // link button with creation fragment
         view.addTaskButton.setOnClickListener(v -> {
-            var dialogFragment = CreateTaskDialogFragment.newInstance();
+            var dialogFragment = CreateTaskDialogFragment.newInstance(dateManager);
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
 
@@ -205,6 +229,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
             activityModel.getOrderedTasks().removeObserver(dateObserver);
 
             var newDate = dateManager.incrementDate();
+            activityModel.setDateManager(dateManager);
             date.setValue(newDate);
         });
 
@@ -266,7 +291,11 @@ public class SuccessoratorTaskListFragment extends Fragment {
             activityModel.markComplete(task.getSortOrder());
         } else if (item.getTitle() == TaskContextMenuOption.Delete.getTitle()) {
             // Implement delete task action
-            activityModel.removeTask(task.getSortOrder());
+            if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+                activityModel.removeRecurringTask(task.getSortOrder());
+            } else {
+                activityModel.removeTask(task.getSortOrder());
+            }
         } else {
             return false;
         }

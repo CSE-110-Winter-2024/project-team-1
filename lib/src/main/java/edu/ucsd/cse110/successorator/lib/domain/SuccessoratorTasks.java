@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import com.sun.net.httpserver.Authenticator;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -96,6 +98,26 @@ public class SuccessoratorTasks {
         return tasks;
     }
 
+    // since recurring tasks cant be marked as complete, this is largely unnecessary but we'll implement this way just in case, for future extensibility
+    public static List<SuccessoratorRecurringTask> insertTask(List<SuccessoratorRecurringTask> tasks, SuccessoratorRecurringTask task, boolean atBoundary) {
+        //int i = tasks.size() - 1; // start index
+        /*if (atBoundary) { // insert task right after all finished tasks (desired for new/completed tasks)
+            // iterate until first finished task is found
+            for (i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).getIsComplete()) {
+                    break;
+                }
+            }
+        }*/
+        tasks.add(task);
+
+        // update orders
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+        return tasks;
+    }
+
     public static List<SuccessoratorTask> toggleComplete(List<SuccessoratorTask> tasks, int sortOrder) {
         var task = tasks.get(sortOrder);
         var modifiedTask = task.withIsComplete(!task.getIsComplete());
@@ -124,6 +146,14 @@ public class SuccessoratorTasks {
         return tasks;
     }
 
+    public static List<SuccessoratorRecurringTask> deleteRecurringTask(List<SuccessoratorRecurringTask> tasks, int sortOrder) {
+        tasks.remove(sortOrder);
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+        return tasks;
+    }
+
     public static List<SuccessoratorTask> rescheduleTaskToToday(List<SuccessoratorTask> tasks, int sortOrder) {
         var task = tasks.get(sortOrder);
         var modifiedTask = task.withDueDate(LocalDate.now().toEpochDay());
@@ -144,6 +174,70 @@ public class SuccessoratorTasks {
         return tasks;
     }
 
+    public static int getId(List<SuccessoratorTask> tasks) {
+        int id = 0;
+        for (var task : tasks) {
+            if (task.getId() > id) {
+                id = task.getId();
+            }
+        }
+        return id + 1;
+    }
+
+    public static List<SuccessoratorTask> scheduleTasks(List<SuccessoratorTask> tasks, SuccessoratorRecurringTask task) {
+        //System.out.println("Method called!");
+        if (task.getCurrentTask() == -1 || task.getUpcomingTask() == -1) { // new task
+            //System.out.println("New task scheduled!");
+            SuccessoratorTask currentTask = task.scheduleTask();
+            SuccessoratorTask upcomingTask = task.scheduleTask();
+            int id = getId(tasks);
+            currentTask = currentTask.withId(id);
+            upcomingTask = upcomingTask.withId(id + 1);
+            task.setCurrentTask(id);
+            task.setUpcomingTask(id + 1);
+
+            //System.out.println("Current task ID: " + currentTask.getId());
+            //System.out.println("Upcoming task ID: " + upcomingTask.getId());
+
+            //System.out.println("Current task date: " + currentTask.getDueDate());
+            //System.out.println("Upcoming task date: " + upcomingTask.getDueDate());
+
+            tasks.add(currentTask);
+            tasks.add(upcomingTask);
+
+            //System.out.println("Tasks added!");
+
+            // update orders
+            for (int i = 0; i < tasks.size(); i++) {
+                tasks.set(i, tasks.get(i).withSortOrder(i));
+            }
+
+            return tasks;
+        }
+        // existing task
+        // shift new task to old task
+        task.setCurrentTask(task.getUpcomingTask());
+
+        // schedule a new task
+        SuccessoratorTask upcomingTask = task.scheduleTask();
+        int id = getId(tasks);
+        upcomingTask = upcomingTask.withId(id);
+
+        // update id
+        task.setUpcomingTask(id);
+
+        // add the task
+        tasks.add(upcomingTask);
+        System.out.println("New task added!");
+
+        // update orders
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+
+        return tasks;
+    }
+
     public static List<SuccessoratorTask> rescheduleTasks(List<SuccessoratorTask> tasks) {
         return tasks.stream()
                 .map(task -> rescheduleGuard(task))
@@ -153,53 +247,9 @@ public class SuccessoratorTasks {
     // guarded function to keep map clean
     public static SuccessoratorTask rescheduleGuard(SuccessoratorTask task) {
         if (task.getType() == TaskType.Recurring && task.getDueDate() == LocalDate.now().toEpochDay()) {
-            return rescheduleTask(task);
+            //return rescheduleTask(task);
+            return null;
         }
         return task;
-    }
-
-    public static SuccessoratorTask rescheduleTask(SuccessoratorTask task) {
-        Calendar newDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        Calendar originalDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        newDate.setTimeInMillis(task.getDueDate() * MILLISECONDS_IN_DAY); // necessary because no setTimeInDays method exists
-        switch(task.getInterval()) {
-            case Daily:
-                newDate.add(Calendar.DATE, 1);
-                break;
-            case Weekly:
-                newDate.add(Calendar.WEEK_OF_YEAR, 1);
-                break;
-            case Monthly:
-                // first, get the intended day (e.g. 3rd saturday of month)
-                // defer computation of original date for (probably marginal) performance gains
-                originalDate.setTimeInMillis(task.getCreateDate() * MILLISECONDS_IN_DAY);
-                int dayOfWeek = originalDate.get(Calendar.DAY_OF_WEEK);
-                int weekOfMonth = originalDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-
-                // then, increment our date by a month
-                // we only increment if the actual week matches the expected week
-                // if it doesn't, then the previous month must have overflowed
-                // this means the month already incremented, so we avoid double incrementing
-                if (newDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) == weekOfMonth) {
-                    newDate.add(Calendar.MONTH, 1);
-                }
-
-                // next, set according day. calendar will overflow for us if necessary
-                newDate.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-                newDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, weekOfMonth);
-                break;
-            case Yearly:
-                originalDate.setTimeInMillis(task.getCreateDate() * MILLISECONDS_IN_DAY);
-
-                newDate.add(Calendar.YEAR, 1);
-
-                int dayOfMonth = originalDate.get(Calendar.DAY_OF_MONTH);
-                int month = originalDate.get(Calendar.MONTH);
-
-                newDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                newDate.set(Calendar.MONTH, month);
-                break;
-        }
-        return task.withDueDate(newDate.getTimeInMillis()/MILLISECONDS_IN_DAY);
     }
 }

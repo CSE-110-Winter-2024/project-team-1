@@ -16,7 +16,7 @@ public class SuccessoratorTaskTest {
         int sortOrder = 1;
         Boolean isComplete = false;
 
-        SuccessoratorTask task = new SuccessoratorTask(id, name, sortOrder, isComplete, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(id, name, sortOrder, isComplete, TaskType.Normal, 0, TaskContext.Home);
 
         assertEquals(id, task.getId());
         assertEquals(name, task.getName());
@@ -27,7 +27,7 @@ public class SuccessoratorTaskTest {
     @Test
     public void testWithId() {
         Integer id = 1;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, TaskContext.Home);
 
         SuccessoratorTask updatedTask = task.withId(id);
 
@@ -36,15 +36,13 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
         assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
         assertEquals(task.getDueDate(), updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
     }
 
     @Test
     public void testWithSortOrder() {
         int sortOrder = 2;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, TaskContext.Home);
 
         SuccessoratorTask updatedTask = task.withSortOrder(sortOrder);
 
@@ -53,15 +51,13 @@ public class SuccessoratorTaskTest {
         assertEquals(sortOrder, updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
         assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
         assertEquals(task.getDueDate(), updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
     }
 
     @Test
     public void testWithIsComplete() {
         Boolean isComplete = true;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, TaskContext.Home);
 
         SuccessoratorTask updatedTask = task.withIsComplete(isComplete);
 
@@ -70,15 +66,13 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(isComplete, updatedTask.getIsComplete());
         assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
         assertEquals(task.getDueDate(), updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
     }
 
     @Test
     public void testWithTaskType() {
         TaskType taskType = TaskType.Normal;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, TaskContext.Home);
 
         SuccessoratorTask updatedTask = task.withType(taskType);
 
@@ -87,15 +81,13 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
         assertEquals(taskType, updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
         assertEquals(task.getDueDate(), updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
     }
 
     @Test
     public void testWithDueDate() {
         long dueDate = 0;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 1, 1, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 1, TaskContext.Home);
 
         SuccessoratorTask updatedTask = task.withDueDate(dueDate);
 
@@ -104,140 +96,126 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
         assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
         assertEquals(dueDate, updatedTask.getDueDate());
     }
 
     @Test
     public void testRescheduleDaily() {
-        SuccessoratorTask task = new SuccessoratorTask(null, "Daily Task", 0, false, TaskType.Recurring, LocalDate.now().toEpochDay(), LocalDate.now().toEpochDay(), TaskInterval.Daily, TaskContext.Home);
-        SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Daily Task", 0, false, TaskType.Recurring, LocalDate.now().toEpochDay(), TaskContext.Home);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Daily Task", 0, LocalDate.now().toEpochDay(), 0, TaskInterval.Daily, TaskContext.Home, 0, 0);
+        SuccessoratorTask updatedTask = recurringTask.scheduleTask();
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(task.getDueDate() + 1, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(task.getDueDate(), updatedTask.getDueDate());
     }
 
     @Test
     public void testRescheduleWeekly() {
-        SuccessoratorTask task = new SuccessoratorTask(null, "Weekly Task", 0, false, TaskType.Recurring, LocalDate.now().toEpochDay(), LocalDate.now().toEpochDay(), TaskInterval.Weekly, TaskContext.Home);
-        SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Weekly Task", 0, false, TaskType.Recurring, LocalDate.now().toEpochDay(), TaskContext.Home);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Weekly Task", 0, LocalDate.now().toEpochDay(), 0, TaskInterval.Weekly, TaskContext.Home, 0, 0);
+        SuccessoratorTask updatedTask = recurringTask.scheduleTask();
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(task.getDueDate() + 7, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(task.getDueDate(), updatedTask.getDueDate());
     }
 
     @Test
     public void testRescheduleMonthlyHappy() {
-        SuccessoratorTask task = new SuccessoratorTask(null, "Monthly Task", 0, false, TaskType.Recurring, 19789, 19789, TaskInterval.Monthly, TaskContext.Home);
-        SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Monthly Task", 0, false, TaskType.Recurring, 19789, TaskContext.Home);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Monthly Task", 0, 19789, 0, TaskInterval.Monthly, TaskContext.Home, 0, 0);
+        SuccessoratorTask updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(19817, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19789, updatedTask.getDueDate());
     }
 
     @Test
     public void testRescheduleYearlyHappy() {
-        SuccessoratorTask task = new SuccessoratorTask(null, "Yearly Task", 0, false, TaskType.Recurring, 19790, 19790, TaskInterval.Yearly, TaskContext.Home);
-        SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Yearly Task", 0, false, TaskType.Recurring, 19790, TaskContext.Home);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Yearly Task", 0, 19790, 0, TaskInterval.Yearly, TaskContext.Home, 0, 0);
+        SuccessoratorTask updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(20155, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19790, updatedTask.getDueDate());
     }
 
     @Test
     public void testRescheduleFifthDay() {
         long fifthDayTest = 19812; // March 30th, 2024 (5th Saturday)
-        SuccessoratorTask task = new SuccessoratorTask(null, "Fifth Saturday Task", 0, false, TaskType.Recurring, fifthDayTest, fifthDayTest, TaskInterval.Monthly, TaskContext.Home);
-        SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Fifth Saturday Task", 0, false, TaskType.Recurring, fifthDayTest, TaskContext.Home);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Fifth Saturday Task", 0, fifthDayTest, 0, TaskInterval.Monthly, TaskContext.Home, 0, 0);
+        SuccessoratorTask updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(19847, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19812, updatedTask.getDueDate());
     }
 
     @Test
     public void testRescheduleLeapYear() {
         long leapYearTest = 19782; // February 29th, 2024
-        SuccessoratorTask task = new SuccessoratorTask(null, "Fifth Saturday Task", 0, false, TaskType.Recurring, leapYearTest, leapYearTest, TaskInterval.Yearly, TaskContext.Home);
-        SuccessoratorTask updatedTask = SuccessoratorTasks.rescheduleTask(task);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Leap Year Task", 0, false, TaskType.Recurring, leapYearTest, TaskContext.Home);
+        SuccessoratorRecurringTask recurringTask = new SuccessoratorRecurringTask(null, "Leap Year Task", 0, leapYearTest, 0, TaskInterval.Yearly, TaskContext.Home, 0, 0);
+        SuccessoratorTask updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(20148, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19782, updatedTask.getDueDate());
 
         // we'll manually check the next four years
-        updatedTask = SuccessoratorTasks.rescheduleTask(updatedTask);
+        updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(20148, updatedTask.getDueDate());
+
+
+        updatedTask = recurringTask.scheduleTask();
+
+        assertEquals(task.getName(), updatedTask.getName());
+        assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
+        assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
+        assertEquals(task.getType(), TaskType.Recurring);
         assertEquals(20513, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
 
 
-        updatedTask = SuccessoratorTasks.rescheduleTask(updatedTask);
+        updatedTask = recurringTask.scheduleTask();
 
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
+        assertEquals(task.getType(), TaskType.Recurring);
         assertEquals(20878, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
-
-
-        updatedTask = SuccessoratorTasks.rescheduleTask(updatedTask);
-
-        assertEquals(task.getName(), updatedTask.getName());
-        assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
-        assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
-        assertEquals(21243, updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
     }
 
     @Test
     public void testWithContext(){
         TaskContext context = TaskContext.School;
-        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home);
+        SuccessoratorTask task = new SuccessoratorTask(null, "Task", 0, false, TaskType.Normal, 0, TaskContext.Home);
         SuccessoratorTask updatedTask = task.withContext(context);
         assertNull(updatedTask.getId());
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
         assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getCreateDate(), updatedTask.getCreateDate());
         assertEquals(task.getDueDate(), updatedTask.getDueDate());
-        assertEquals(task.getInterval(), updatedTask.getInterval());
         assertEquals(TaskContext.School, updatedTask.getContext());
     }
+
 }

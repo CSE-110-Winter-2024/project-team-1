@@ -63,4 +63,8 @@ public class RoomSuccessoratorTaskRepository implements SuccessoratorTaskReposit
     public void deleteAll() {
         dao.deleteAll();
     }
+
+    public int getMaxID() {
+        return dao.getMaxID();
+    }
 }

@@ -14,22 +14,17 @@ public class SuccessoratorTask {
 
     private final @NonNull TaskType type;
 
-    private final @NonNull long createDate;
-
     private final @NonNull long dueDate;
-    private final @NonNull TaskInterval interval;
+
     private final @NonNull TaskContext context;
 
-
-    public SuccessoratorTask(@Nullable Integer id, @NonNull String name, int sortOrder, @NonNull Boolean isComplete, @NonNull TaskType type, @Nullable long createDate, @NonNull long dueDate, TaskInterval interval, TaskContext context) {
+    public SuccessoratorTask(@Nullable Integer id, @NonNull String name, int sortOrder, @NonNull Boolean isComplete, @NonNull TaskType type, @NonNull long dueDate, TaskContext context) {
         this.name = name;
         this.sortOrder = sortOrder;
         this.id = id;
         this.isComplete = isComplete;
         this.type = type;
-        this.createDate = createDate;
         this.dueDate = dueDate;
-        this.interval = interval;
         this.context = context;
     }
 
@@ -53,48 +48,33 @@ public class SuccessoratorTask {
         return type;
     }
 
-    public @Nullable long getCreateDate() {
-        return createDate;
-    }
-
     public @NonNull long getDueDate() {
         return dueDate;
     }
 
-    public @Nullable TaskInterval getInterval() {
-        return interval;
-    }
     public @NonNull TaskContext getContext() { return context; }
 
     public SuccessoratorTask withId(int id) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, dueDate, context);
     }
 
     public SuccessoratorTask withSortOrder(int sortOrder) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, dueDate, context);
     }
 
     public SuccessoratorTask withIsComplete(Boolean isComplete) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, dueDate, context);
     }
 
     public SuccessoratorTask withType(TaskType type) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
-    }
-
-    public SuccessoratorTask withCreateDate(long createDate) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, dueDate, context);
     }
 
     public SuccessoratorTask withDueDate(long dueDate) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
-    }
-
-    public SuccessoratorTask withInterval(TaskInterval interval) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, dueDate, context);
     }
 
     public SuccessoratorTask withContext(TaskContext context) {
-        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, createDate, dueDate, interval, context);
+        return new SuccessoratorTask(id, name, sortOrder, isComplete, type, dueDate, context);
     }
 }
