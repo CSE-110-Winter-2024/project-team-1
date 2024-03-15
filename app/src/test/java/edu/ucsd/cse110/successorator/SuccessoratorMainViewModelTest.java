@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 import androidx.lifecycle.LiveData;
 
@@ -58,6 +59,60 @@ public class SuccessoratorMainViewModelTest {
 
         // THEN
         assertEquals(taskText, taskRepository.findAll().getValue().get(0).getName());
+    }
+
+    @Test
+    void filterTaskByCategory() {
+    }
+    @Test
+    void createTaskWithContext() {
+        // GIVEN
+        TaskContext context = TaskContext.Errands;
+        // WHEN
+        model.add(new SuccessoratorTask(1, "taskText", 1, false, TaskType.Normal, 0, context));
+        // THEN
+        List<SuccessoratorTask> tasks = model.getOrderedTasks().getValue();
+        assertNotNull(tasks);
+        assertEquals(1, tasks.size());
+        assertEquals(TaskContext.Errands, tasks.get(0).getContext());
+    }
+
+    @Test
+    void filterTasksByContext() {
+        // Given the user is on any task view
+        // When the user selects the hamburger menu icon
+        // And the user selects a context
+        // Then only the tasks with that context show up on task view
+        // And the top bar has a focus mode indicator
+    }
+
+    @Test
+    void createRecurringTask() {
+        // Given the user is on the view after pressing the plus button
+        // When the user selects an option for the task (daily, monthly, etc.)
+        // And the user selects create
+        // Then the task appears on the task view, and it keeps showing up whenever it occurs.
+    }
+
+    @Test
+    void moveAndEditTasks() {
+        // Given the user is on the task view and there is a task present
+        // When the user long presses on the task
+        // Then a menu for moving, finishing, and deleting the task should appear.
+    }
+
+    @Test
+    void seeCurrentTitleAtTopOfScreen() {
+        // Given the user is on the task view
+        // When the user selects the Today or Tomorrow views
+        // Then the Today or Tomorrow text, along with the correct date, shows up as the title.
+    }
+
+    @Test
+    void addNewTasksToCategory() {
+        // Given the user is on the task view of any context
+        // When the user clicks the plus button
+        // Then the user is prompted with a view to input a task with a save button
     }
 
     private static class MockSuccessoratorTaskRepository implements SuccessoratorTaskRepository {
