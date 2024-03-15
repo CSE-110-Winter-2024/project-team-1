@@ -36,7 +36,7 @@ public class MainViewModel extends ViewModel {
     private TaskContext selectedContext;
 
     public boolean recurringActive = false;
-
+    
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -108,8 +108,6 @@ public class MainViewModel extends ViewModel {
             recurringTaskRepository.add(task);
             return;
         }
-        var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
-        recurringTaskRepository.save(newTasks);
 
         System.out.println("Recurring creaated!");
 
@@ -119,7 +117,12 @@ public class MainViewModel extends ViewModel {
         }
         System.out.println("Calling schedule method!");
         var newNormalTasks = SuccessoratorTasks.scheduleTasks(normalTasks, task);
+        System.out.println(task.getCurrentTask());
+        System.out.println(task.getUpcomingTask());
         taskRepository.save(newNormalTasks);
+
+        var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
+        recurringTaskRepository.save(newTasks);
     }
 
     public void removeTask(int sortOrder) {
