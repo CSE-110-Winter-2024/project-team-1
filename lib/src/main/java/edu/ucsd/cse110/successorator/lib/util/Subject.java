@@ -2,6 +2,8 @@ package edu.ucsd.cse110.successorator.lib.util;
 
 import androidx.annotation.Nullable;
 
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
+
 public interface Subject<T> {
     /**
      * Gets the current value of the subject. May be null.

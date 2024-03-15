@@ -1,44 +1,41 @@
 package edu.ucsd.cse110.successorator;
 
-import static androidx.test.core.app.ActivityScenario.launch;
-
-import static junit.framework.TestCase.assertEquals;
-
-import android.content.res.Resources;
-
-import androidx.lifecycle.Lifecycle;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
+import android.view.View;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.ui.tasklist.SuccessoratorTaskListFragment;
+
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Instrumented test, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
     @Test
-    public void displaysHelloWorld() {
-        try (var scenario = ActivityScenario.launch(MainActivity.class)) {
+    public void testTaskListFragmentIsDisplayed() {
+        Espresso.onView(withId(R.id.fragment_container))
+                .check(matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(withId(R.id.task_list))
+                .check(matches(ViewMatchers.isDisplayed()));
+    }
 
-            // Observe the scenario's lifecycle to wait until the activity is created.
-            scenario.onActivity(activity -> {
-                var rootView = activity.findViewById(R.id.root);
-                var binding = ActivityMainBinding.bind(rootView);
+    @Test
+    public void testAddTaskFragmentIsDisplayedAfterButtonClick() {
+        Espresso.onView(withId(R.id.add_task_button))
+                .perform(ViewActions.click());
+        // ensure create task fragment appears
+    }
 
-                var expected = activity.getString(R.string.hello_world);
-                var actual = binding.placeholderText.getText();
-
-                assertEquals(expected, actual);
-            });
-
-            // Simulate moving to the started state (above will then be called).
-            scenario.moveToState(Lifecycle.State.STARTED);
-        }
+    @Test
+    public void testSwitchContextFragmentIsDisplayedAfterButtonClick() {
+        Espresso.onView(withId(R.id.hamburger_menu_icon))
+                .perform(ViewActions.click());
+        // ensure switch context fragment appears
     }
 }
