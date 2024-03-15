@@ -39,7 +39,11 @@ public class DateManagerTest {
     @Test
     public void testGetDateFromFormattedString() {
         assertEquals(calendar.getTimeInMillis(), dateManager.getDateFromFormattedString("March 8, 2024"));
+    }
 
+    @Test
+    public void testGetEpochDays() {
+        assertEquals(19790, dateManager.getEpochDays());
     }
 
     @Test

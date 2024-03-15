@@ -42,7 +42,10 @@ public class DateManager {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public long getEpochDays() {
+        return calendar.getTimeInMillis() / (24*60*60*1000);
     }
 
     public String getTomorrow() {
