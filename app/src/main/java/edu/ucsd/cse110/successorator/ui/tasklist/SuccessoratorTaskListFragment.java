@@ -96,20 +96,6 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 List.of()
         );
 
-        activityModel.getOrderedTasks().observe(tasks -> {
-            if (activityModel.recurringActive) {
-                this.view.taskList.setAdapter(recurringAdapter);
-                recurringAdapter.clear();
-                recurringAdapter.addAll(activityModel.getOrderedRecurringTasks().getValue());
-                recurringAdapter.notifyDataSetChanged();
-            }
-            if (tasks != null) {
-                adapter.clear();
-                adapter.addAll(new ArrayList<>(tasks));
-                adapter.notifyDataSetChanged();
-            }
-        });
-
         date.observe(date -> {
             if (date != null) {
                 activityModel.removeFinishedTasks(dateManager.getEpochDays());
@@ -135,6 +121,21 @@ public class SuccessoratorTaskListFragment extends Fragment {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
 
         this.view.taskList.setAdapter(adapter);
+
+        activityModel.getOrderedTasks().observe(tasks -> {
+            if (activityModel.recurringActive) {
+                this.view.taskList.setAdapter(recurringAdapter);
+                recurringAdapter.clear();
+                recurringAdapter.addAll(new ArrayList<>(activityModel.getOrderedRecurringTasks().getValue()));
+                recurringAdapter.notifyDataSetChanged();
+            } else if (tasks != null){
+                this.view.taskList.setAdapter(adapter);
+                adapter.clear();
+                adapter.addAll(new ArrayList<>(tasks));
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         this.view.taskList.setEmptyView(this.view.emptyText);
         // link button with creation fragment
         view.addTaskButton.setOnClickListener(v -> {

@@ -68,6 +68,7 @@ public class MainViewModel extends ViewModel {
             }
         });
 
+
         recurringTaskRepository.findAll().observe(recurringTasks -> {
             if (recurringTasks != null) {
                 var newRecurringTasks = recurringTasks.stream()
@@ -198,11 +199,8 @@ public class MainViewModel extends ViewModel {
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
         if (selectedFilter == TaskFilterOption.Recurring) {
             this.recurringActive = true;
-            applyRecurringFilters(this.unfilteredRecurringTasks.getValue());
-        }
-        if (selectedContext != null) {
+        } else {
             this.recurringActive = false;
-            newTasks = SuccessoratorTasksFilterer.filterTasksByContext(selectedContext, newTasks);
         }
         this.orderedTasks.setValue(newTasks);
     }

@@ -25,6 +25,7 @@ import java.util.Calendar;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateTaskBinding;
+import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTask;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
@@ -215,7 +216,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
 
 
         if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
-            var recurringTask = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
+            var recurringTask = new SuccessoratorRecurringTask(null, name, -1, createDate, 0, taskInterval, context, -1, -1);
             activityModel.add(recurringTask);
         } else {
             var task = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
