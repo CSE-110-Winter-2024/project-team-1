@@ -16,6 +16,7 @@ import edu.ucsd.cse110.successorator.data.db.SuccessoratorTaskEntity;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
+import edu.ucsd.cse110.successorator.lib.domain.TaskInterval;
 import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 
 import java.util.ArrayList;
@@ -106,9 +107,19 @@ public class SuccessoratorMainViewModelTest {
     @Test
     void createRecurringTask() {
         // Given the user is on the view after pressing the plus button
+        int createDate = 1;
+        String name = "Recurring Task";
+        TaskContext context = TaskContext.Home;
+
         // When the user selects an option for the task (daily, monthly, etc.)
+        TaskInterval taskInterval =  TaskInterval.Daily;
+
         // And the user selects create
+        var recurringTask = new SuccessoratorRecurringTask(null, name, -1, createDate, 0, taskInterval, context, -1, -1);
+        model.add(recurringTask);
+
         // Then the task appears on the task view, and it keeps showing up whenever it occurs.
+        assertEquals(name, recurringTaskRepository.findAll().getValue().get(0).getName());
     }
 
     @Test
