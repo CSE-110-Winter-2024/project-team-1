@@ -98,11 +98,10 @@ public class SuccessoratorTaskListFragment extends Fragment {
 
         date.observe(date -> {
             if (date != null) {
-                activityModel.removeFinishedTasks(dateManager.getEpochDays());
                 activityModel.rescheduleRecurring(dateManager.getEpochDays());
+                activityModel.removeFinishedTasks(dateManager.getEpochDays());
             }
         });
-
 
         sharedPreferences = getActivity().getSharedPreferences("successorator", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
@@ -149,7 +148,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
         this.view.taskList.setEmptyView(this.view.emptyText);
         // link button with creation fragment
         view.addTaskButton.setOnClickListener(v -> {
-            var dialogFragment = CreateTaskDialogFragment.newInstance();
+            var dialogFragment = CreateTaskDialogFragment.newInstance(dateManager);
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
 
@@ -230,6 +229,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
             activityModel.getOrderedTasks().removeObserver(dateObserver);
 
             var newDate = dateManager.incrementDate();
+            activityModel.setDateManager(dateManager);
             date.setValue(newDate);
         });
 
