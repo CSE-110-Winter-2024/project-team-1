@@ -29,26 +29,8 @@ public class SuccessoratorTasksFilterer {
     }
 
     public static List<SuccessoratorTask> filterTasksByContext(TaskContext context, List<SuccessoratorTask> tasks) {
-        switch (context) {
-            case Home:
-                // find all tasks that are due today and return them
-                return tasks.stream()
-                        .filter(task -> task.getContext() == TaskContext.Home)
-                        .collect(java.util.stream.Collectors.toList());
-            case School:
-                return tasks.stream()
-                        .filter(task -> task.getContext() == TaskContext.School)
-                        .collect(java.util.stream.Collectors.toList());
-            case Work:
-                return tasks.stream()
-                        .filter(task -> task.getContext() == TaskContext.Work)
-                        .collect(java.util.stream.Collectors.toList());
-            case Errands:
-                return tasks.stream()
-                        .filter(task -> task.getContext() == TaskContext.Errands)
-                        .collect(java.util.stream.Collectors.toList());
-            default:
-                return tasks;
-        }
+        return tasks.stream()
+            .filter(task -> task.getContext() == context)
+            .collect(java.util.stream.Collectors.toList());
     }
 }
