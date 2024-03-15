@@ -281,7 +281,11 @@ public class SuccessoratorTaskListFragment extends Fragment {
             activityModel.markComplete(task.getSortOrder());
         } else if (item.getTitle() == TaskContextMenuOption.Delete.getTitle()) {
             // Implement delete task action
-            activityModel.removeTask(task.getSortOrder());
+            if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+                activityModel.removeRecurringTask(task.getSortOrder());
+            } else {
+                activityModel.removeTask(task.getSortOrder());
+            }
         } else {
             return false;
         }
