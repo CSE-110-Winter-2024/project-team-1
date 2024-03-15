@@ -119,8 +119,8 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(task.getDueDate() + 7, updatedTask.getDueDate());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(task.getDueDate(), updatedTask.getDueDate());
     }
 
     @Test
@@ -132,8 +132,8 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(19817, updatedTask.getDueDate());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19789, updatedTask.getDueDate());
     }
 
     @Test
@@ -145,8 +145,8 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(20155, updatedTask.getDueDate());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19790, updatedTask.getDueDate());
     }
 
     @Test
@@ -159,8 +159,8 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(19847, updatedTask.getDueDate());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19812, updatedTask.getDueDate());
     }
 
     @Test
@@ -173,8 +173,8 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
-        assertEquals(20148, updatedTask.getDueDate());
+        assertEquals(task.getType(), TaskType.Recurring);
+        assertEquals(19782, updatedTask.getDueDate());
 
         // we'll manually check the next four years
         updatedTask = recurringTask.scheduleTask();
@@ -182,7 +182,7 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
+        assertEquals(task.getType(), TaskType.Recurring);
         assertEquals(20513, updatedTask.getDueDate());
 
 
@@ -191,7 +191,7 @@ public class SuccessoratorTaskTest {
         assertEquals(task.getName(), updatedTask.getName());
         assertEquals(task.getSortOrder(), updatedTask.getSortOrder());
         assertEquals(task.getIsComplete(), updatedTask.getIsComplete());
-        assertEquals(task.getType(), updatedTask.getType());
+        assertEquals(task.getType(), TaskType.Recurring);
         assertEquals(20878, updatedTask.getDueDate());
 
 
