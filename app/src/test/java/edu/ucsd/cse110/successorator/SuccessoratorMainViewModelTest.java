@@ -1,9 +1,7 @@
 package edu.ucsd.cse110.successorator;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +15,7 @@ import androidx.lifecycle.LiveData;
 import edu.ucsd.cse110.successorator.data.db.SuccessoratorTaskEntity;
 import edu.ucsd.cse110.successorator.lib.domain.SuccessoratorRecurringTask;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
+import edu.ucsd.cse110.successorator.lib.domain.TaskFilterOption;
 import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
+import kotlinx.coroutines.scheduling.Task;
 
 public class SuccessoratorMainViewModelTest {
     private MainViewModel model;
@@ -63,13 +63,24 @@ public class SuccessoratorMainViewModelTest {
 
     @Test
     void filterTaskByCategory() {
+        // GIVEN
+        TaskType type = TaskType.Pending;
+        model.add(new SuccessoratorTask(1, "Test1", 0, false, type, 1, TaskContext.Home));
+        model.add(new SuccessoratorTask(2, "Test2", 0, false, TaskType.Normal, 1, TaskContext.Home));
+        model.add(new SuccessoratorTask(3, "Test3", 0, false, TaskType.Recurring, 1, TaskContext.Home));
+        model.add(new SuccessoratorTask(4, "Test4", 0, false, type, 1, TaskContext.Home));
+        // WHEN
+        model.changeFilter(TaskFilterOption.Pending);
+        // THEN
+        assertEquals(type, taskRepository.findAll().getValue().get(0).getType());
+        assertEquals(type, taskRepository.findAll().getValue().get(1).getType());
     }
     @Test
     void createTaskWithContext() {
         // GIVEN
         TaskContext context = TaskContext.Errands;
         // WHEN
-        model.add(new SuccessoratorTask(1, "taskText", 1, false, TaskType.Normal, 0, context));
+        model.add(new SuccessoratorTask(1, "Test", 1, false, TaskType.Normal, 0, context));
         // THEN
         List<SuccessoratorTask> tasks = model.getOrderedTasks().getValue();
         assertNotNull(tasks);
@@ -80,10 +91,16 @@ public class SuccessoratorMainViewModelTest {
     @Test
     void filterTasksByContext() {
         // Given the user is on any task view
-        // When the user selects the hamburger menu icon
-        // And the user selects a context
+        TaskContext context = TaskContext.Work;
+        model.add(new SuccessoratorTask(4, "Test", 0, false, TaskType.Pending, 1, TaskContext.School));
+        model.add(new SuccessoratorTask(1, "Test2", 0, false, TaskType.Pending, 1, TaskContext.Errands));
+        model.add(new SuccessoratorTask(2, "Test3", 0, false, TaskType.Pending, 1, TaskContext.Work));
+        model.add(new SuccessoratorTask(3, "Test4", 0, false, TaskType.Pending, 1, TaskContext.Home));
+        // When the user selects a context
+        model.focus("Work");
+        model.changeFilter(TaskFilterOption.Pending);
         // Then only the tasks with that context show up on task view
-        // And the top bar has a focus mode indicator
+        assertEquals(context, taskRepository.findAll().getValue().get(0).getContext());
     }
 
     @Test
