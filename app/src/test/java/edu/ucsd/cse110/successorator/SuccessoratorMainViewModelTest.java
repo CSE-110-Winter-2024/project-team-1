@@ -34,7 +34,6 @@ import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
-import kotlinx.coroutines.scheduling.Task;
 
 public class SuccessoratorMainViewModelTest {
     private MainViewModel model;
@@ -114,8 +113,15 @@ public class SuccessoratorMainViewModelTest {
     @Test
     void moveAndEditTasks() {
         // Given the user is on the task view and there is a task present
+        model.add(new SuccessoratorTask(1, "Test", 0, false, TaskType.Pending, 1, TaskContext.School));
         // When the user long presses on the task
         // Then a menu for moving, finishing, and deleting the task should appear.
+        model.rescheduleTaskToToday(0);
+        assertEquals(TaskType.Normal, taskRepository.findAll().getValue().get(0).getType());
+        model.markComplete(0);
+        assertEquals(true, taskRepository.findAll().getValue().get(0).getIsComplete());
+        model.removeTask(0);
+        assertEquals(null, taskRepository.findAll().getValue().get(0));
     }
 
     @Test
