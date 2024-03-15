@@ -215,17 +215,6 @@ public class SuccessoratorTasks {
             return tasks;
         }
         // existing task
-        // remove old task
-        System.out.println("Tasks being updated!");
-        int i;
-        for (i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getId() == task.getCurrentTask()) {
-                break;
-            }
-        }
-        tasks.remove(i);
-        System.out.println("Old task removed!");
-
         // shift new task to old task
         task.setCurrentTask(task.getUpcomingTask());
 
@@ -242,7 +231,7 @@ public class SuccessoratorTasks {
         System.out.println("New task added!");
 
         // update orders
-        for (i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             tasks.set(i, tasks.get(i).withSortOrder(i));
         }
 

@@ -191,6 +191,48 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
     }
 
+    public boolean checkReschedule(long currentId, long upcomingId, List<SuccessoratorTask> tasks) {
+        long currentDue = -1;
+        long upcomingDue = -1;
+        int currentIdx = -1;
+        int upcomingIdx = -1;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId() == currentId) {
+                currentDue = tasks.get(i).getDueDate();
+                currentIdx = i;
+            }
+            if (tasks.get(i).getId() == upcomingId) {
+                upcomingDue = tasks.get(i).getDueDate();
+                upcomingIdx = i;
+            }
+        }
+        if (currentIdx == -1) { // current task doesn't exist (was completed?)
+            return true;
+        }
+        if (currentDue == upcomingDue) { // rollover caused collision
+            // delete old task
+            tasks.remove(currentIdx);
+            return true;
+        }
+        return false;
+    }
+
+    public void rescheduleRecurring(long date) {
+        var recurringTasks = this.unfilteredRecurringTasks.getValue();
+        var tasks = this.unfilteredTasks.getValue();
+        if (recurringTasks == null) {
+            android.util.Log.d("tasks", "is null");
+            return;
+        }
+        for (SuccessoratorRecurringTask task : recurringTasks) {
+            boolean rescheduleCode = checkReschedule(task.getCurrentTask(), task.getUpcomingTask(), tasks);
+            if (rescheduleCode) {
+                tasks = SuccessoratorTasks.scheduleTasks(tasks, task);
+            }
+        }
+        taskRepository.save(tasks);
+    }
+
     public void changeFilter(TaskFilterOption filter) {
         this.selectedFilter = filter;
         var tasks = this.unfilteredTasks.getValue();
