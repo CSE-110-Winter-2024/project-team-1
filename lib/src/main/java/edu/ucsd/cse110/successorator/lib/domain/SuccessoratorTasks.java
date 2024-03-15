@@ -29,6 +29,26 @@ public class SuccessoratorTasks {
         return tasks;
     }
 
+    // since recurring tasks cant be marked as complete, this is largely unnecessary but we'll implement this way just in case, for future extensibility
+    public static List<SuccessoratorRecurringTask> insertTask(List<SuccessoratorRecurringTask> tasks, SuccessoratorRecurringTask task, boolean atBoundary) {
+        int i = 0; // start index
+        /*if (atBoundary) { // insert task right after all finished tasks (desired for new/completed tasks)
+            // iterate until first finished task is found
+            for (i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).getIsComplete()) {
+                    break;
+                }
+            }
+        }*/
+        tasks.add(i, task);
+
+        // update orders
+        for (i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+        return tasks;
+    }
+
     public static List<SuccessoratorTask> toggleComplete(List<SuccessoratorTask> tasks, int sortOrder) {
         var task = tasks.get(sortOrder);
         boolean isComplete = !task.getIsComplete(); // simple toggle
@@ -47,6 +67,14 @@ public class SuccessoratorTasks {
     }
 
     public static List<SuccessoratorTask> deleteTask(List<SuccessoratorTask> tasks, int sortOrder) {
+        tasks.remove(sortOrder);
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+        return tasks;
+    }
+
+    public static List<SuccessoratorRecurringTask> deleteRecurringTask(List<SuccessoratorRecurringTask> tasks, int sortOrder) {
         tasks.remove(sortOrder);
         for (int i = 0; i < tasks.size(); i++) {
             tasks.set(i, tasks.get(i).withSortOrder(i));
