@@ -103,6 +103,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void add(SuccessoratorRecurringTask task) {
+        System.out.println("Add method called!");
         var tasks = this.unfilteredRecurringTasks.getValue();
         if (tasks == null) {
             recurringTaskRepository.add(task);
@@ -110,6 +111,16 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
         recurringTaskRepository.save(newTasks);
+
+        System.out.println("Recurring creaated!");
+
+        var normalTasks = this.unfilteredTasks.getValue();
+        if (normalTasks == null) {
+            return;
+        }
+        System.out.println("Calling schedule method!");
+        var newNormalTasks = SuccessoratorTasks.scheduleTasks(normalTasks, task);
+        taskRepository.save(newNormalTasks);
     }
 
     public void removeTask(int sortOrder) {

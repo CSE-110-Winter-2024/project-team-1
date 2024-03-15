@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import com.sun.net.httpserver.Authenticator;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -98,7 +100,7 @@ public class SuccessoratorTasks {
 
     // since recurring tasks cant be marked as complete, this is largely unnecessary but we'll implement this way just in case, for future extensibility
     public static List<SuccessoratorRecurringTask> insertTask(List<SuccessoratorRecurringTask> tasks, SuccessoratorRecurringTask task, boolean atBoundary) {
-        int i = 0; // start index
+        //int i = tasks.size() - 1; // start index
         /*if (atBoundary) { // insert task right after all finished tasks (desired for new/completed tasks)
             // iterate until first finished task is found
             for (i = 0; i < tasks.size(); i++) {
@@ -107,10 +109,10 @@ public class SuccessoratorTasks {
                 }
             }
         }*/
-        tasks.add(i, task);
+        tasks.add(task);
 
         // update orders
-        for (i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             tasks.set(i, tasks.get(i).withSortOrder(i));
         }
         return tasks;
@@ -169,6 +171,75 @@ public class SuccessoratorTasks {
             modifiedTask = modifiedTask.withType(TaskType.Normal);
         }
         tasks.set(sortOrder, modifiedTask);
+        return tasks;
+    }
+
+    public static int getId(List<SuccessoratorTask> tasks) {
+        int id = 0;
+        for (var task : tasks) {
+            if (task.getId() > id) {
+                id = task.getId();
+            }
+        }
+        return id + 1;
+    }
+
+    public static List<SuccessoratorTask> scheduleTasks(List<SuccessoratorTask> tasks, SuccessoratorRecurringTask task) {
+        System.out.println("Method called!");
+        if (task.getCurrentTask() == -1 || task.getUpcomingTask() == -1) { // new task
+            System.out.println("New task scheduled!");
+            SuccessoratorTask currentTask = task.scheduleTask();
+            SuccessoratorTask upcomingTask = task.scheduleTask();
+            int id = getId(tasks);
+            currentTask = currentTask.withId(id);
+            upcomingTask = upcomingTask.withId(id);
+            task.setCurrentTask(id);
+            task.setUpcomingTask(id + 1);
+
+            tasks.add(currentTask);
+            tasks.add(upcomingTask);
+
+            System.out.println("Tasks added!");
+
+            // update orders
+            for (int i = 0; i < tasks.size(); i++) {
+                tasks.set(i, tasks.get(i).withSortOrder(i));
+            }
+
+            return tasks;
+        }
+        // existing task
+        // remove old task
+        System.out.println("Tasks being updated!");
+        int i;
+        for (i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId() == task.getCurrentTask()) {
+                break;
+            }
+        }
+        tasks.remove(i);
+        System.out.println("Old task removed!");
+
+        // shift new task to old task
+        task.setCurrentTask(task.getUpcomingTask());
+
+        // schedule a new task
+        SuccessoratorTask upcomingTask = task.scheduleTask();
+        int id = getId(tasks);
+        upcomingTask = upcomingTask.withId(id);
+
+        // update id
+        task.setUpcomingTask(id);
+
+        // add the task
+        tasks.add(upcomingTask);
+        System.out.println("New task added!");
+
+        // update orders
+        for (i = 0; i < tasks.size(); i++) {
+            tasks.set(i, tasks.get(i).withSortOrder(i));
+        }
+
         return tasks;
     }
 
