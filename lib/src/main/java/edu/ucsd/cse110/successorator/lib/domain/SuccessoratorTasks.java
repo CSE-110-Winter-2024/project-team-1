@@ -192,9 +192,15 @@ public class SuccessoratorTasks {
             SuccessoratorTask upcomingTask = task.scheduleTask();
             int id = getId(tasks);
             currentTask = currentTask.withId(id);
-            upcomingTask = upcomingTask.withId(id);
+            upcomingTask = upcomingTask.withId(id + 1);
             task.setCurrentTask(id);
             task.setUpcomingTask(id + 1);
+
+            System.out.println("Current task ID: " + currentTask.getId());
+            System.out.println("Upcoming task ID: " + upcomingTask.getId());
+
+            System.out.println("Current task date: " + currentTask.getDueDate());
+            System.out.println("Upcoming task date: " + upcomingTask.getDueDate());
 
             tasks.add(currentTask);
             tasks.add(upcomingTask);

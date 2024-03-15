@@ -113,8 +113,6 @@ public class SuccessoratorRecurringTask {
     }
 
     public SuccessoratorTask scheduleTask() {
-        scheduleCount++;
-
         Calendar newDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         Calendar originalDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         newDate.setTimeInMillis(getCreateDate() * MILLISECONDS_IN_DAY); // necessary because no setTimeInDays method exists
@@ -157,6 +155,7 @@ public class SuccessoratorRecurringTask {
                 newDate.set(Calendar.MONTH, month);
                 break;
         }
+        scheduleCount++;
         return new SuccessoratorTask(null, name, 0, false, TaskType.Normal, newDate.getTimeInMillis()/MILLISECONDS_IN_DAY, context);
     }
 }
