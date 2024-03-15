@@ -215,7 +215,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
         }
 
 
-        if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+        if (taskType == TaskType.Recurring) {
             var recurringTask = new SuccessoratorRecurringTask(null, name, -1, createDate, 0, taskInterval, context, -1, -1);
             activityModel.add(recurringTask);
         } else {
