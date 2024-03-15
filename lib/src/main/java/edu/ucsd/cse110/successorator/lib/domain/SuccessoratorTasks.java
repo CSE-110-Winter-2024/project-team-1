@@ -185,9 +185,9 @@ public class SuccessoratorTasks {
     }
 
     public static List<SuccessoratorTask> scheduleTasks(List<SuccessoratorTask> tasks, SuccessoratorRecurringTask task) {
-        System.out.println("Method called!");
+        //System.out.println("Method called!");
         if (task.getCurrentTask() == -1 || task.getUpcomingTask() == -1) { // new task
-            System.out.println("New task scheduled!");
+            //System.out.println("New task scheduled!");
             SuccessoratorTask currentTask = task.scheduleTask();
             SuccessoratorTask upcomingTask = task.scheduleTask();
             int id = getId(tasks);
@@ -196,16 +196,16 @@ public class SuccessoratorTasks {
             task.setCurrentTask(id);
             task.setUpcomingTask(id + 1);
 
-            System.out.println("Current task ID: " + currentTask.getId());
-            System.out.println("Upcoming task ID: " + upcomingTask.getId());
+            //System.out.println("Current task ID: " + currentTask.getId());
+            //System.out.println("Upcoming task ID: " + upcomingTask.getId());
 
-            System.out.println("Current task date: " + currentTask.getDueDate());
-            System.out.println("Upcoming task date: " + upcomingTask.getDueDate());
+            //System.out.println("Current task date: " + currentTask.getDueDate());
+            //System.out.println("Upcoming task date: " + upcomingTask.getDueDate());
 
             tasks.add(currentTask);
             tasks.add(upcomingTask);
 
-            System.out.println("Tasks added!");
+            //System.out.println("Tasks added!");
 
             // update orders
             for (int i = 0; i < tasks.size(); i++) {
@@ -215,17 +215,6 @@ public class SuccessoratorTasks {
             return tasks;
         }
         // existing task
-        // remove old task
-        System.out.println("Tasks being updated!");
-        int i;
-        for (i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getId() == task.getCurrentTask()) {
-                break;
-            }
-        }
-        tasks.remove(i);
-        System.out.println("Old task removed!");
-
         // shift new task to old task
         task.setCurrentTask(task.getUpcomingTask());
 
@@ -242,7 +231,7 @@ public class SuccessoratorTasks {
         System.out.println("New task added!");
 
         // update orders
-        for (i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             tasks.set(i, tasks.get(i).withSortOrder(i));
         }
 

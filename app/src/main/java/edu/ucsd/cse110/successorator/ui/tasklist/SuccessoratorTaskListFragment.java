@@ -99,6 +99,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
         date.observe(date -> {
             if (date != null) {
                 activityModel.removeFinishedTasks(dateManager.getEpochDays());
+                activityModel.rescheduleRecurring(dateManager.getEpochDays());
             }
         });
 
