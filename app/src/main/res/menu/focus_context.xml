@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home_menu_item"
+            android:title="Home"
+            android:iconTint="@color/yellow"/>
+        <item
+            android:id="@+id/school_menu_item"
+            android:title="School" />
+        <item
+            android:id="@+id/work_menu_item"
+            android:title="Work" />
+        <item
+            android:id="@+id/errands_menu_item"
+            android:title="Errands" />
+    </group>
+    <item
+        android:id="@+id/cancel_menu_item"
+        android:title="Cancel"
+        android:background="@android:color/transparent" />
+</menu>

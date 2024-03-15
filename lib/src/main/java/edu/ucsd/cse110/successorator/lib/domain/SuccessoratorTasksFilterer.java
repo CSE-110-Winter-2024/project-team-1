@@ -27,4 +27,10 @@ public class SuccessoratorTasksFilterer {
                 return tasks;
         }
     }
+
+    public static List<SuccessoratorTask> filterTasksByContext(TaskContext context, List<SuccessoratorTask> tasks) {
+        return tasks.stream()
+            .filter(task -> task.getContext() == context)
+            .collect(java.util.stream.Collectors.toList());
+    }
 }

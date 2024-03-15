@@ -1,8 +1,7 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
-import com.sun.net.httpserver.Authenticator;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -10,15 +9,83 @@ import java.util.TimeZone;
 public class SuccessoratorTasks {
     static final int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
-    public static List<SuccessoratorTask> insertTask(List<SuccessoratorTask> tasks, SuccessoratorTask task, boolean atBoundary) {
-        int i = 0; // start index
-        if (atBoundary) { // insert task right after all finished tasks (desired for new/completed tasks)
-            // iterate until first finished task is found
-            for (i = 0; i < tasks.size(); i++) {
-                if (tasks.get(i).getIsComplete()) {
-                    break;
-                }
+    public static List<SuccessoratorTask> insertByContext(List<SuccessoratorTask> tasks, SuccessoratorTask task, boolean prepend) {
+        int boundary = 0;
+        for (; boundary < tasks.size(); boundary++) {
+            // find boundary between unfinished/finished
+            if (tasks.get(boundary).getIsComplete()) {
+                break;
             }
+        }
+
+        ArrayList<TaskContext> contexts = new ArrayList<>();
+
+        contexts.add(TaskContext.Home);
+        int hwBoundary = 0;
+        for (; hwBoundary < boundary; hwBoundary++) {
+            // find boundary between home/work
+            if (!contexts.contains(tasks.get(hwBoundary).getContext())) {
+                break;
+            }
+        }
+
+        contexts.add(TaskContext.Work);
+        int wsBoundary = 0;
+        for (; wsBoundary < boundary; wsBoundary++) {
+            // find boundary between work/school
+            if (!contexts.contains(tasks.get(wsBoundary).getContext())) {
+                break;
+            }
+        }
+
+        contexts.add(TaskContext.School);
+        int seBoundary = 0;
+        for (; seBoundary < boundary; seBoundary++) {
+            // find boundary between school/errands
+            if (!contexts.contains(tasks.get(seBoundary).getContext())) {
+                break;
+            }
+        }
+
+        int i; // start index
+        switch(task.getContext()) {
+            // sort in the order of H, W, S, E
+            case Errands:
+                if (prepend) {
+                    i = seBoundary;
+                }
+                else {
+                    i = boundary;
+                }
+                break;
+            case School:
+                if (prepend) {
+                    i = wsBoundary;
+                }
+                else {
+                    i = seBoundary;
+                }
+                break;
+            case Work:
+                if (prepend) {
+                    i = hwBoundary;
+                }
+                else {
+                    i = wsBoundary;
+                }
+                break;
+            default:
+                if (prepend) {
+                    i = 0;
+                }
+                else {
+                    i = hwBoundary;
+                }
+                break;
+        }
+        if (task.getIsComplete()) {
+            // only applies when toggling unfinished to finished
+            i = boundary;
         }
         tasks.add(i, task);
 
@@ -31,19 +98,22 @@ public class SuccessoratorTasks {
 
     public static List<SuccessoratorTask> toggleComplete(List<SuccessoratorTask> tasks, int sortOrder) {
         var task = tasks.get(sortOrder);
-        boolean isComplete = !task.getIsComplete(); // simple toggle
-        var modifiedTask = task.withIsComplete(isComplete);
+        var modifiedTask = task.withIsComplete(!task.getIsComplete());
         tasks.remove(sortOrder);
-        if (isComplete) { // task was completed
-            return insertTask(tasks, modifiedTask, true); // insert the completed task using custom func.
-        }
-        return insertTask(tasks, modifiedTask, false);
+        return insertByContext(tasks, modifiedTask, true);
     }
 
-    public static List<SuccessoratorTask> removeCompletedTasks(List<SuccessoratorTask> tasks) {
-        return tasks.stream()
+    public static List<SuccessoratorTask> removeCompletedTasks(List<SuccessoratorTask> tasks, long date) {
+        tasks = tasks.stream()
                 .filter(task -> !task.getIsComplete())
                 .collect(java.util.stream.Collectors.toList());
+        for (int i = 0; i < tasks.size(); i++) {
+            // rollover Today tasks
+            if (tasks.get(i).getType() == TaskType.Normal && tasks.get(i).getDueDate() == date - 1) {
+                tasks.set(i, tasks.get(i).withDueDate(tasks.get(i).getDueDate() + 1));
+            }
+        }
+        return tasks;
     }
 
     public static List<SuccessoratorTask> deleteTask(List<SuccessoratorTask> tasks, int sortOrder) {
