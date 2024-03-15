@@ -59,4 +59,7 @@ public interface SuccessoratorRecurringTaskDao {
 
     @Query("DELETE FROM successoratorRecurringTasks")
     void deleteAll();
+
+    @Query("SELECT max(id) FROM successoratorTasks")
+    int getMaxID();
 }

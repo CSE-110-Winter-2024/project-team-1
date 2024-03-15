@@ -87,4 +87,7 @@ public interface SuccessoratorTaskDao {
 
     @Query("DELETE FROM successoratorTasks")
     void deleteAll();
+
+    @Query("SELECT max(id) FROM successoratorTasks")
+    int getMaxID();
 }
