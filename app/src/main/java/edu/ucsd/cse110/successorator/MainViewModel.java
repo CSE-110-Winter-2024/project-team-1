@@ -55,7 +55,8 @@ public class MainViewModel extends ViewModel {
                         .collect(Collectors.toList());
 
                 var filtertedTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, newTasks);
-                this.orderedTasks.setValue(filtertedTasks);
+                var contextFilteredTasks = SuccessoratorContextFilterer.filterContext(selectedContext, filtertedTasks);
+                this.orderedTasks.setValue(contextFilteredTasks);
                 this.unfilteredTasks.setValue(newTasks);
             }
         });
@@ -75,6 +76,9 @@ public class MainViewModel extends ViewModel {
         }
         var newTasks = SuccessoratorTasks.insertTask(tasks, task, true);
         taskRepository.save(newTasks);
+
+        applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void removeTask(int sortOrder) {
@@ -87,6 +91,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
 
         applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
@@ -99,6 +104,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
 
         applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void rescheduleTaskToTomorrow(int sortOrder) {
@@ -111,6 +117,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
 
         applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void markComplete(int sortOrder) {
@@ -119,6 +126,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
 
         applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void removeFinishedTasks() {
@@ -131,6 +139,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
 
         applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void rescheduleTasks() {
@@ -143,6 +152,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(newTasks);
 
         applyFilter(newTasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public void changeFilter(TaskFilterOption filter) {
@@ -154,6 +164,7 @@ public class MainViewModel extends ViewModel {
         }
         
         applyFilter(tasks);
+        applyContextFilter(orderedTasks.getValue());
     }
 
     public TaskFilterOption getSelectedFilter() {
@@ -162,13 +173,15 @@ public class MainViewModel extends ViewModel {
 
     public void changeContext(TaskContext context) {
         this.selectedContext = context;
+
         var tasks = this.unfilteredTasks.getValue();
         if (tasks == null) {
             android.util.Log.d("tasks", "is null");
             return;
         }
 
-        applyContextFilter(tasks);
+        applyFilter(tasks);
+        applyContextFilter(orderedTasks.getValue());
     }
     public TaskContext getSelectedContext() {
         return selectedContext;

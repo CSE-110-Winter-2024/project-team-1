@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.ui.tasklist;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -133,8 +134,9 @@ public class SuccessoratorTaskListFragment extends Fragment {
             var dialogFragment = CreateTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
         });
+
         view.filterContext.setOnClickListener(v -> {
-            var contextDialogFragment = SwitchContextDialogFragment.newInstance();
+            var contextDialogFragment = SwitchContextDialogFragment.newInstance(this);
             contextDialogFragment.show(getParentFragmentManager(), "SwitchContextDialogFragment");
         });
 
@@ -243,5 +245,11 @@ public class SuccessoratorTaskListFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    //pass a hex color code
+    public void setContextColor(int color) {
+        //set the button's tint
+        view.filterContext.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 }

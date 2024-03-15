@@ -22,19 +22,23 @@ import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentSwitchContextBinding;
 import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
+import edu.ucsd.cse110.successorator.ui.tasklist.SuccessoratorTaskListFragment;
 
 public class SwitchContextDialogFragment extends DialogFragment {
     private MainViewModel activityModel;
     private FragmentSwitchContextBinding view;
 
+    private SuccessoratorTaskListFragment successoratorTaskListFragment;
+
     SwitchContextDialogFragment() {
         // limitations of object oriented programming :(
     }
 
-    public static SwitchContextDialogFragment newInstance() {
+    public static SwitchContextDialogFragment newInstance(SuccessoratorTaskListFragment successoratorTaskListFragment) {
         var fragment = new SwitchContextDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        fragment.successoratorTaskListFragment = successoratorTaskListFragment;
         return fragment;
     }
 
@@ -51,6 +55,7 @@ public class SwitchContextDialogFragment extends DialogFragment {
         view.homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                successoratorTaskListFragment.setContextColor(getResources().getColor(R.color.yellow));
                 activityModel.changeContext(TaskContext.Home);
                 dialog.dismiss();
             }
@@ -59,6 +64,7 @@ public class SwitchContextDialogFragment extends DialogFragment {
         view.workButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                successoratorTaskListFragment.setContextColor(getResources().getColor(R.color.blue));
                 activityModel.changeContext(TaskContext.Work);
                 dialog.dismiss();
             }
@@ -67,6 +73,7 @@ public class SwitchContextDialogFragment extends DialogFragment {
         view.schoolButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                successoratorTaskListFragment.setContextColor(getResources().getColor(R.color.purple));
                 activityModel.changeContext(TaskContext.School);
                 dialog.dismiss();
             }
@@ -75,14 +82,15 @@ public class SwitchContextDialogFragment extends DialogFragment {
         view.errandsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                successoratorTaskListFragment.setContextColor(getResources().getColor(R.color.green));
                 activityModel.changeContext(TaskContext.Errands);
                 dialog.dismiss();
             }
         });
-
         view.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                successoratorTaskListFragment.setContextColor(getResources().getColor(R.color.white));
                 activityModel.changeContext(TaskContext.None);
                 dialog.dismiss();
             }

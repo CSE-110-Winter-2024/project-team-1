@@ -27,7 +27,7 @@
         <Spinner
             android:id="@+id/filterSpinner"
             android:layout_width="225dp"
-            android:layout_height="13dp"
+            android:layout_height="20dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,21 +37,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.505" />
 
-        <RadioButton
+        <ImageButton
             android:id="@+id/filterContext"
-            android:layout_width="61dp"
-            android:layout_height="26dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="38dp"
-            android:layout_marginEnd="37dp"
-            android:layout_marginBottom="26dp"
-            android:button="@android:drawable/ic_menu_sort_by_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:src="@android:drawable/ic_menu_sort_by_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/filterSpinner"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,6 +55,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="100dp"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

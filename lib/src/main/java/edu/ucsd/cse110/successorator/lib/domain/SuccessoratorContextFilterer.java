@@ -9,7 +9,7 @@ public class SuccessoratorContextFilterer {
         switch (filter) {
             case Home:
                 return tasks.stream()
-                        .filter(task -> task.getContext() == (TaskContext.Home))
+                        .filter(task -> task.getContext()  == TaskContext.None || task.getContext() == (TaskContext.Home))
                         .collect(java.util.stream.Collectors.toList());
             case Work:
                 return tasks.stream()
