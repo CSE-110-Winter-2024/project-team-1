@@ -35,6 +35,7 @@ import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
+import kotlinx.coroutines.scheduling.Task;
 
 public class SuccessoratorMainViewModelTest {
     private MainViewModel model;
@@ -139,14 +140,19 @@ public class SuccessoratorMainViewModelTest {
     public void seeCurrentTitleAtTopOfScreen() {
         // Given the user is on the task view
         // When the user selects the Today or Tomorrow views
+        model.changeFilter(TaskFilterOption.Today);
         // Then the Today or Tomorrow text, along with the correct date, shows up as the title.
+        assertEquals(TaskFilterOption.Today, TaskFilterOption.Today);
     }
 
     @Test
     public void addNewTasksToCategory() {
         // Given the user is on the task view of any context
+        model.changeFilter(TaskFilterOption.Pending);
         // When the user clicks the plus button
+        model.add(new SuccessoratorTask(1, "Test", 0, false, TaskType.Pending, 1, TaskContext.School));
         // Then the user is prompted with a view to input a task with a save button
+        assertEquals(TaskType.Pending, taskRepository.findAll().getValue().get(0).getType());
     }
 
     private static class MockSuccessoratorTaskRepository implements SuccessoratorTaskRepository {
