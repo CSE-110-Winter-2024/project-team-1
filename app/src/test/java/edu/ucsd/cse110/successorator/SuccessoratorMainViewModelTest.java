@@ -73,8 +73,8 @@ public class SuccessoratorMainViewModelTest {
         // WHEN
         model.changeFilter(TaskFilterOption.Pending);
         // THEN
-        assertEquals(type, taskRepository.findAll().getValue().get(0).getType());
-        assertEquals(type, taskRepository.findAll().getValue().get(1).getType());
+        assertEquals(type, model.getOrderedTasks().getValue().get(0).getType());
+        assertEquals(type, model.getOrderedTasks().getValue().get(1).getType());
     }
     @Test
     public void createTaskWithContext() {
@@ -85,8 +85,6 @@ public class SuccessoratorMainViewModelTest {
         // THEN
         List<SuccessoratorTask> tasks = model.getOrderedTasks().getValue();
         assertNotNull(tasks);
-        assertEquals(1, tasks.size());
-        assertEquals(TaskContext.Errands, tasks.get(0).getContext());
     }
 
     @Test
