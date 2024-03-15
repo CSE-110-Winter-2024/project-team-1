@@ -63,7 +63,7 @@ public class SuccessoratorMainViewModelTest {
     }
 
     @Test
-    void filterTaskByCategory() {
+    public void filterTaskByCategory() {
         // GIVEN
         TaskType type = TaskType.Pending;
         model.add(new SuccessoratorTask(1, "Test1", 0, false, type, 1, TaskContext.Home));
@@ -77,7 +77,7 @@ public class SuccessoratorMainViewModelTest {
         assertEquals(type, taskRepository.findAll().getValue().get(1).getType());
     }
     @Test
-    void createTaskWithContext() {
+    public void createTaskWithContext() {
         // GIVEN
         TaskContext context = TaskContext.Errands;
         // WHEN
@@ -90,7 +90,7 @@ public class SuccessoratorMainViewModelTest {
     }
 
     @Test
-    void filterTasksByContext() {
+    public void filterTasksByContext() {
         // Given the user is on any task view
         TaskContext context = TaskContext.Work;
         model.add(new SuccessoratorTask(4, "Test", 0, false, TaskType.Pending, 1, TaskContext.School));
@@ -105,7 +105,7 @@ public class SuccessoratorMainViewModelTest {
     }
 
     @Test
-    void createRecurringTask() {
+    public void createRecurringTask() {
         // Given the user is on the view after pressing the plus button
         int createDate = 1;
         String name = "Recurring Task";
@@ -123,21 +123,21 @@ public class SuccessoratorMainViewModelTest {
     }
 
     @Test
-    void moveAndEditTasks() {
+    public void moveAndEditTasks() {
         // Given the user is on the task view and there is a task present
         // When the user long presses on the task
         // Then a menu for moving, finishing, and deleting the task should appear.
     }
 
     @Test
-    void seeCurrentTitleAtTopOfScreen() {
+    public void seeCurrentTitleAtTopOfScreen() {
         // Given the user is on the task view
         // When the user selects the Today or Tomorrow views
         // Then the Today or Tomorrow text, along with the correct date, shows up as the title.
     }
 
     @Test
-    void addNewTasksToCategory() {
+    public void addNewTasksToCategory() {
         // Given the user is on the task view of any context
         // When the user clicks the plus button
         // Then the user is prompted with a view to input a task with a save button
