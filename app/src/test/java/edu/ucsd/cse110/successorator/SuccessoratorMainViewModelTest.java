@@ -35,7 +35,6 @@ import edu.ucsd.cse110.successorator.lib.domain.TaskType;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
-import kotlinx.coroutines.scheduling.Task;
 
 public class SuccessoratorMainViewModelTest {
     private MainViewModel model;
