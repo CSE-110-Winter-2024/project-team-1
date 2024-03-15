@@ -35,6 +35,8 @@ public class MainViewModel extends ViewModel {
     private TaskFilterOption selectedFilter = TaskFilterOption.Today;
     private TaskContext selectedContext;
 
+    public boolean recurringActive = false;
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -128,7 +130,7 @@ public class MainViewModel extends ViewModel {
         var newTasks = SuccessoratorTasks.deleteRecurringTask(tasks, sortOrder);
         recurringTaskRepository.save(newTasks);
 
-        //applyFilter(newTasks);
+        applyRecurringFilters(newTasks);
     }
 
     public void rescheduleTaskToToday(int sortOrder) {
@@ -194,10 +196,25 @@ public class MainViewModel extends ViewModel {
 
     private void applyFilters(List<SuccessoratorTask> tasks) {
         var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        if (selectedFilter == TaskFilterOption.Recurring) {
+            this.recurringActive = true;
+            //var recurringTasks = SuccessoratorTasksFilterer.filterRecurringTasksByContext(selectedContext, )
+        }
         if (selectedContext != null) {
             newTasks = SuccessoratorTasksFilterer.filterTasksByContext(selectedContext, newTasks);
         }
         this.orderedTasks.setValue(newTasks);
+    }
+
+    private void applyRecurringFilters(List<SuccessoratorRecurringTask> tasks) {
+        var newTasks = tasks;
+        if (selectedFilter != TaskFilterOption.Recurring) {
+            this.recurringActive = false;
+        }
+        if (selectedContext != null) {
+            newTasks = SuccessoratorTasksFilterer.filterRecurringTasksByContext(selectedContext, newTasks);
+        }
+        this.orderedRecurringTasks.setValue(newTasks);
     }
 
     public void focus(String focusContext) {

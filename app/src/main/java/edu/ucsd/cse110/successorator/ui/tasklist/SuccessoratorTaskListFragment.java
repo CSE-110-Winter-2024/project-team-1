@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
@@ -40,6 +41,7 @@ public class SuccessoratorTaskListFragment extends Fragment {
     private FragmentTaskListBinding view;
     private SuccessoratorTaskListAdapter adapter;
 
+    private SuccessoratorRecurringTaskListAdapter recurringAdapter;
 
     private DateManager dateManager = new DateManager();
 
@@ -88,7 +90,18 @@ public class SuccessoratorTaskListFragment extends Fragment {
                 }
         );
 
+        this.recurringAdapter = new SuccessoratorRecurringTaskListAdapter(
+                requireContext(),
+                List.of()
+        );
+
         activityModel.getOrderedTasks().observe(tasks -> {
+            if (activityModel.recurringActive) {
+                this.view.taskList.setAdapter(recurringAdapter);
+                recurringAdapter.clear();
+                recurringAdapter.addAll(new ArrayList<>((Collection) activityModel.getOrderedRecurringTasks()));
+                recurringAdapter.notifyDataSetChanged();
+            }
             if (tasks != null) {
                 adapter.clear();
                 adapter.addAll(new ArrayList<>(tasks));

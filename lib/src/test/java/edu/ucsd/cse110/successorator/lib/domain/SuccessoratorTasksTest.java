@@ -78,7 +78,7 @@ public class SuccessoratorTasksTest {
         tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, true, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
-        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks, 0);
 
         assertEquals(2, modifiedTasks.size());
         assertEquals("Task 3", modifiedTasks.get(1).getName());
@@ -91,14 +91,14 @@ public class SuccessoratorTasksTest {
         tasks.add(new SuccessoratorTask(1, "Task 1", 0, true, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
-        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks);
+        List<SuccessoratorTask> modifiedTasks = SuccessoratorTasks.removeCompletedTasks(tasks, 0);
 
         assertEquals(2, modifiedTasks.size());
         assertEquals("Task 2", modifiedTasks.get(0).getName());
 
         var expected = modifiedTasks.toArray();
         modifiedTasks.add(new SuccessoratorTask(4, "Task 4", 3, true, TaskType.Normal, 0, TaskContext.Home));
-        modifiedTasks = SuccessoratorTasks.removeCompletedTasks(modifiedTasks);
+        modifiedTasks = SuccessoratorTasks.removeCompletedTasks(modifiedTasks, 0);
 
         assertArrayEquals(expected, modifiedTasks.toArray());
 

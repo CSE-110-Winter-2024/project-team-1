@@ -94,9 +94,9 @@ public class SuccessoratorTasksFiltererTest {
     @Test
     public void testFilterTasksByContext() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
-        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Home));
-        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.School));
-        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, 0, TaskInterval.Daily, TaskContext.Errands));
+        tasks.add(new SuccessoratorTask(1, "Task 1", 0, false, TaskType.Normal, 0, TaskContext.Home));
+        tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.School));
+        tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Errands));
 
         List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasksByContext(TaskContext.Home, tasks);
 

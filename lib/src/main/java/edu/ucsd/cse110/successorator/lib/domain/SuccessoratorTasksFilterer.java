@@ -33,4 +33,10 @@ public class SuccessoratorTasksFilterer {
             .filter(task -> task.getContext() == context)
             .collect(java.util.stream.Collectors.toList());
     }
+
+    public static List<SuccessoratorRecurringTask> filterRecurringTasksByContext(TaskContext context, List<SuccessoratorRecurringTask> tasks) {
+        return tasks.stream()
+                .filter(task -> task.getContext() == context)
+                .collect(java.util.stream.Collectors.toList());
+    }
 }
