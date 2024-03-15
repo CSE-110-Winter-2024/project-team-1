@@ -5,9 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.SuperscriptSpan;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
@@ -19,7 +16,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 // internal imports
-import java.time.LocalDate;
 import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
@@ -36,14 +32,14 @@ import edu.ucsd.cse110.successorator.util.DateManager;
 public class CreateTaskDialogFragment extends DialogFragment {
     private MainViewModel activityModel;
     private FragmentDialogCreateTaskBinding view;
-    private DateManager dateManager = new DateManager();
+    private DateManager dateManager;
 
-    CreateTaskDialogFragment() {
-        // limitations of object oriented programming :(
+    CreateTaskDialogFragment(DateManager dateManager) {
+        this.dateManager = dateManager;
     }
 
-    public static CreateTaskDialogFragment newInstance() {
-        var fragment = new CreateTaskDialogFragment();
+    public static CreateTaskDialogFragment newInstance(DateManager dateManager) {
+        var fragment = new CreateTaskDialogFragment(dateManager);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -117,90 +113,15 @@ public class CreateTaskDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
+        // name
         var name = view.taskNameEntry.getText().toString();
-
         if (name.trim().isEmpty()) {
             Toast.makeText(getContext(), "Please enter a task name", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // it doesn't really matter what we pass here, since the add method will extract
-        // only the name from the task (consider changing? possible refactor could be helpful)
-        long createDate = 0;
-        long dueDate = 0;
-        TaskInterval taskInterval = TaskInterval.Daily;
-        switch (activityModel.getSelectedFilter()) {
-            case Today:
-                dueDate = LocalDate.now().toEpochDay();
-                createDate = dueDate;
-                break;
-            case Tomorrow:
-                dueDate = LocalDate.now().plusDays(1).toEpochDay();
-                createDate = dueDate;
-                break;
-            case Pending:
-                //if pending leave due date as 0, since it has no due date
-                break;
-            case Recurring:
-                // simple validation
-                if (view.editTextDate.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getContext(), "Please select a start date", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            default:
-                break;
-        }
-
-        TaskType taskType = TaskType.Normal;
-        switch (activityModel.getSelectedFilter()) {
-            case Recurring:
-                taskType = TaskType.Recurring;
-                break;
-            case Pending:
-                taskType = TaskType.Pending;
-                break;
-            default:
-                break;
-        }
-
-        if (activityModel.getSelectedFilter() != TaskFilterOption.Pending) {
-            if (!view.oneTime.isChecked() && view.filterRadioGroup.getCheckedRadioButtonId() != -1) {
-                taskType = TaskType.Recurring;
-                name += ", ";
-
-                if (view.daily.isChecked()) {
-                    name += view.daily.getText();
-                } else if (view.weekly.isChecked()) {
-                    name += view.weekly.getText();
-                    taskInterval = TaskInterval.Weekly;
-                } else if (view.monthly.isChecked()) {
-                    name += view.monthly.getText();
-                    taskInterval = TaskInterval.Monthly;
-                } else if (view.yearly.isChecked()) {
-                    name += view.yearly.getText();
-                    taskInterval = TaskInterval.Yearly;
-                }
-            } else {
-                taskType = TaskType.Normal;
-            }
-
-            switch (activityModel.getSelectedFilter()) {
-                case Tomorrow:
-                    dueDate = dateManager.getDateFromFormattedString(dateManager.getTomorrowLongDate()) / (24 * 60 * 60 * 1000);
-                    break;
-                case Today:
-                    dueDate = dateManager.getDateFromFormattedString(dateManager.getLongDate()) / (24 * 60 * 60 * 1000);
-                    break;
-                case Recurring:
-                    dueDate = dateManager.getDateFromFormattedString(view.editTextDate.getText().toString()) / (24 * 60 * 60 * 1000);
-                    break;
-            }
-
-            createDate = dueDate;
-        }
-
-        TaskContext context = TaskContext.Home;
-
+        // context
+        TaskContext context;
         int selectedContext = view.contextRadioGroup.getCheckedRadioButtonId();
 
         if (selectedContext == R.id.home) {
@@ -220,16 +141,50 @@ public class CreateTaskDialogFragment extends DialogFragment {
             return;
         }
 
-
-        if (taskType == TaskType.Recurring) {
-            var recurringTask = new SuccessoratorRecurringTask(null, name, -1, createDate, 0, taskInterval, context, -1, -1);
-            activityModel.add(recurringTask);
-        } else {
-            var task = new SuccessoratorTask(null, name, -1, false, taskType, dueDate, context);
-            activityModel.add(task);
+        // interval
+        TaskInterval interval = null;
+        if (view.daily.isChecked()) {
+            interval = TaskInterval.Daily;
+        }
+        else if (view.weekly.isChecked()) {
+            interval = TaskInterval.Weekly;
+        }
+        else if (view.monthly.isChecked()) {
+            interval = TaskInterval.Monthly;
+        }
+        else if (view.yearly.isChecked()) {
+            interval = TaskInterval.Yearly;
         }
 
-        dialog.dismiss();
+        // date
+        String dateText;
+        if (view.editTextDate.getText().toString().trim().isEmpty()) {
+            dateText = view.editTextDate.getHint().toString();
+            assert !dateText.isEmpty();
+        }
+        else {
+            dateText = view.editTextDate.getText().toString();
+        }
+        long createDate = dateManager.getDateFromFormattedString(dateText) / (24*60*60*1000);
+
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Pending) {
+            createDate = 0;
+        }
+
+        if (activityModel.getSelectedFilter() == TaskFilterOption.Recurring) {
+            if (view.editTextDate.getText().toString().trim().isEmpty()) {
+                Toast.makeText(getContext(), "Please select a start date", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+        if (interval != null) {
+            var recurringTask = new SuccessoratorRecurringTask(null, name, -1, createDate, 0, interval, context, -1, -1);
+            activityModel.add(recurringTask);
+        }
+        else {
+            var task = new SuccessoratorTask(null, name, -1, false, TaskType.Normal, createDate, context);
+            activityModel.add(task);
+        }
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {

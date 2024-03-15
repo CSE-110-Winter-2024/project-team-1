@@ -17,7 +17,7 @@ public class SuccessoratorTasksFiltererTest {
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -29,7 +29,7 @@ public class SuccessoratorTasksFiltererTest {
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, LocalDate.now().toEpochDay(), TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Tomorrow, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Tomorrow, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -41,7 +41,7 @@ public class SuccessoratorTasksFiltererTest {
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -53,7 +53,7 @@ public class SuccessoratorTasksFiltererTest {
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Pending, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(1, filteredTasks.size());
     }
@@ -62,7 +62,7 @@ public class SuccessoratorTasksFiltererTest {
     public void testFilterEmpty() {
         List<SuccessoratorTask> tasks = new ArrayList<>();
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Today, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(0, filteredTasks.size());
     }
@@ -74,7 +74,7 @@ public class SuccessoratorTasksFiltererTest {
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Pending, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(0, filteredTasks.size());
     }
@@ -86,7 +86,7 @@ public class SuccessoratorTasksFiltererTest {
         tasks.add(new SuccessoratorTask(2, "Task 2", 1, false, TaskType.Normal, 0, TaskContext.Home));
         tasks.add(new SuccessoratorTask(3, "Task 3", 2, false, TaskType.Normal, 0, TaskContext.Home));
 
-        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks);
+        List<SuccessoratorTask> filteredTasks = SuccessoratorTasksFilterer.filterTasks(TaskFilterOption.Recurring, tasks, LocalDate.now().toEpochDay());
 
         assertEquals(0, filteredTasks.size());
     }

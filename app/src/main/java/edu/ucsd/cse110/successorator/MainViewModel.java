@@ -20,6 +20,7 @@ import edu.ucsd.cse110.successorator.lib.domain.TaskContext;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.util.DateManager;
 
 public class MainViewModel extends ViewModel {
 
@@ -34,6 +35,8 @@ public class MainViewModel extends ViewModel {
 
     private TaskFilterOption selectedFilter = TaskFilterOption.Today;
     private TaskContext selectedContext;
+
+    private DateManager dateManager = new DateManager();
 
     public boolean recurringActive = false;
     
@@ -249,7 +252,7 @@ public class MainViewModel extends ViewModel {
     }
 
     private void applyFilters(List<SuccessoratorTask> tasks) {
-        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks, dateManager.getEpochDays());
         if (selectedContext != null) {
             newTasks = SuccessoratorTasksFilterer.filterTasksByContext(selectedContext, newTasks);
         }
@@ -288,7 +291,7 @@ public class MainViewModel extends ViewModel {
         else {
             selectedContext = null;
         }
-        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks);
+        var newTasks = SuccessoratorTasksFilterer.filterTasks(selectedFilter, tasks, dateManager.getEpochDays());
         this.orderedTasks.setValue(newTasks);
 
         //also filter recurring tasks
@@ -297,5 +300,9 @@ public class MainViewModel extends ViewModel {
             return;
         }
         applyRecurringFilters(recurringTasks);
+    }
+
+    public void setDateManager(DateManager dateManager) {
+        this.dateManager = dateManager;
     }
 }

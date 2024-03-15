@@ -2,6 +2,8 @@ package edu.ucsd.cse110.successorator.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -52,7 +54,8 @@ public class DateManager {
     }
 
     public long getEpochDays() {
-        return calendar.getTimeInMillis() / (24*60*60*1000);
+        var localDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE));
+        return localDate.toEpochDay();
     }
 
     public String getTomorrow() {
